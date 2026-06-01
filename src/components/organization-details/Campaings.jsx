@@ -1,7 +1,8 @@
 import { ChevronRight, Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { CreateCampaignModal } from "./modals/CreateCampaignModal";
 
-export function Campaigns() {
+export function Campaigns({ onAddCampaign }) {
   const navigate = useNavigate();
   const { id: orgId } = useParams();
 
@@ -53,7 +54,9 @@ export function Campaigns() {
     <div className="flex flex-col gap-6 w-full">
       {/* BOTÃO */}
       <div className="flex justify-end">
-        <button className="w-56 p-2.5 bg-blue-600 text-white rounded-[5px] font-bold flex items-center justify-center gap-2">
+        <button 
+        onClick={onAddCampaign}
+        className="w-56 p-2.5 bg-blue-600 text-white rounded-[5px] font-bold flex items-center justify-center gap-2">
           <Plus size={18} />
           Adicionar Campanha
         </button>

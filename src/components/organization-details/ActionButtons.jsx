@@ -1,8 +1,7 @@
 import { toast } from "sonner";
 import { Pencil, Trash2 } from "lucide-react";
 
-export function ActionButtons() {
-
+export function ActionButtons({ onEditClick }) {
   function handleEdit() {
     toast.success("Abrindo edição da organização");
   }
@@ -13,13 +12,12 @@ export function ActionButtons() {
 
   return (
     <div className="flex gap-3">
-
       <button
-        onClick={handleEdit}
-        className="px-4 py-2 border border-[#4269B4] text-[#4269B4] rounded-md font-bold flex items-center gap-2"
+        onClick={onEditClick}
+        className="px-4 py-2 border border[#4269B4] text-[#4269B4] rounded-md font-bold flex items-center gap-2"
       >
-        <Pencil size={16} />
-        Editar Organização
+        <Pencil size={18} />
+        Editar organização
       </button>
 
       <button
@@ -29,7 +27,6 @@ export function ActionButtons() {
         <Trash2 size={16} />
         Excluir Organização
       </button>
-
     </div>
   );
 }

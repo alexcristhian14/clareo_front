@@ -1,6 +1,6 @@
 import { ActionButtons } from "./ActionButtons";
 
-export  function OrganizationHeader() {
+export  function OrganizationHeader({ organization, onEditClick }) {
   return (
     <div className="flex flex-col gap-4 w-full">
 
@@ -20,7 +20,7 @@ export  function OrganizationHeader() {
           </span>
         </div>
 
-        <ActionButtons />
+       <ActionButtons onEditClick={onEditClick} />
 
       </div>
 

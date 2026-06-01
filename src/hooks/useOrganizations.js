@@ -1,6 +1,9 @@
 // hooks/useOrganizations.js
 import { useEffect, useState } from "react";
-import { getOrganizations, createOrganization } from "../services/organizationsService";
+import {
+  getOrganizations,
+  createOrganization,
+} from "../services/organizationsService";
 
 export function useOrganizations() {
   const [organizations, setOrganizations] = useState([]);
@@ -36,13 +39,16 @@ export function useOrganizations() {
       (status === "" || org.status === status) &&
       (minMembers === "" || org.membros >= Number(minMembers)) &&
       (minTransactions === "" || org.transacoes >= Number(minTransactions)) &&
-      (dateFilter === "" || convertDate(org.dataCadastro) === dateFilter)
+      (dateFilter === "" ||
+        convertDate(org.dataCadastro) === dateFilter)
     );
   });
 
   const itemsPerPage = 10;
 
-  const totalPages = Math.ceil(filteredOrganizations.length / itemsPerPage);
+  const totalPages = Math.ceil(
+    filteredOrganizations.length / itemsPerPage
+  );
 
   const currentOrganizations = filteredOrganizations.slice(
     (currentPage - 1) * itemsPerPage,

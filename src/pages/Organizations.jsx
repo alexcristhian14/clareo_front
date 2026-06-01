@@ -4,6 +4,7 @@ import AppLayout from "../layouts/AppLayout";
 import { OrganizationsToolbar } from "../components/organizations/OrganizationsToolbar";
 import { OrganizationsTable } from "../components/organizations/OrganizationsTable";
 import { CreateOrganizationModal } from "../components/organizations/CreateOrganizationModal";
+import { EditOrganizationModal } from "../components/organizations/EditOrganizationModal";
 
 import { useState } from "react";
 import { useOrganizations } from "../hooks/useOrganizations";

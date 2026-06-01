@@ -1,9 +1,8 @@
 import { Plus } from "lucide-react";
-import { Pagination } from "../Pagination";
-
 import { TransactionsTable } from "./TransactionsTable";
+import { CreateTransactionModal } from "./modals/CreateTransactionModal";
 
-export function Wallet() {
+export function Wallet( { onNewTransaction } ) {
   const walletData = {
     total: "R$ 45.823,00",
     available: "R$ 38.123,00",
@@ -28,6 +27,38 @@ export function Wallet() {
       status: "Pendente",
     },
     {
+      date: "28/05/2026",
+      time: "07:15:35",
+      member: "00525",
+      type: "Crédito",
+      value: "R$ 500,00",
+      status: "Cancelada",
+    },
+        {
+      date: "28/05/2026",
+      time: "07:15:35",
+      member: "00525",
+      type: "Crédito",
+      value: "R$ 500,00",
+      status: "Cancelada",
+    },
+        {
+      date: "28/05/2026",
+      time: "07:15:35",
+      member: "00525",
+      type: "Crédito",
+      value: "R$ 500,00",
+      status: "Cancelada",
+    },
+        {
+      date: "28/05/2026",
+      time: "07:15:35",
+      member: "00525",
+      type: "Crédito",
+      value: "R$ 500,00",
+      status: "Cancelada",
+    },
+        {
       date: "28/05/2026",
       time: "07:15:35",
       member: "00525",
@@ -67,7 +98,9 @@ export function Wallet() {
 
       {/* BOTÃO */}
       <div className="flex justify-end">
-        <button className="w-56 p-2.5 bg-blue-600 text-white rounded-[5px] font-bold flex items-center justify-center gap-2">
+        <button
+         onClick={onNewTransaction}
+         className="w-56 p-2.5 bg-blue-600 text-white rounded-[5px] font-bold flex items-center justify-center gap-2">
           <Plus size={18} />
           Nova Transação
         </button>
@@ -75,13 +108,6 @@ export function Wallet() {
 
       {/* TABELA */}
       <TransactionsTable transactions={transactions} />
-
-      <Pagination
-        currentPage={1}
-        totalPages={5}
-        totalItems={50}
-        onPageChange={(page) => console.log(page)}
-      />
     </div>
   );
 }
