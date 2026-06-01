@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { TimelineItem } from "../components/organization-details/TimelineItem";
-import { X, Pencil } from "lucide-react";
+import { Button } from "../components/Button";
+import { X, Pencil, Plus } from "lucide-react";
 import AppLayout from "../layouts/AppLayout";
 
 export function CampaignDetails() {
   const { orgId, campaignId } = useParams();
 
-  // mock (depois vem da API)
   const campaign = {
     title: "Acompanhamento Médico Itinerante",
     organization: "Instituto Saúde Viva",
@@ -26,9 +26,11 @@ export function CampaignDetails() {
       description="Detalhamento da campanha"
     >
       <div className="w-full flex flex-col gap-6">
+
         {/* HEADER BANNER */}
         <div className="w-full p-2.5">
           <div className="bg-white rounded-[10px] border border-zinc-400 p-6 flex justify-between items-start">
+
             {/* TITULO */}
             <div className="flex flex-col">
               <h1 className="text-slate-700 text-3xl font-extrabold">
@@ -40,32 +42,29 @@ export function CampaignDetails() {
             </div>
 
             {/* AÇÕES */}
-            <div className="flex items-center gap-5">
-              <button className="w-56 p-2.5 rounded-[5px] shadow-[8px_1px_14.7px_0px_rgba(0,0,0,0.16)] outline outline-1 outline-indigo-700 flex items-center justify-center gap-2 hover:bg-indigo-50 transition">
-                <Pencil size={18} className="text-indigo-700" />
+            <div className="flex items-center gap-3">
+              <Button variant="outline" icon={Pencil}>
+                Editar Campanha
+              </Button>
 
-                <span className="text-indigo-700 text-sm font-bold">
-                  Editar Campanha
-                </span>
-              </button>
-
-              <button className="w-56 p-2.5 rounded-[5px] shadow-[8px_1px_14.7px_0px_rgba(0,0,0,0.16)] outline outline-1 outline-red-500 flex items-center justify-center gap-2">
-                <X size={18} className="text-red-500" />
-
-                <span className="text-red-500 text-sm font-bold">
-                  Encerrar Campanha
-                </span>
-              </button>
+              <Button variant="danger" icon={X}>
+                Encerrar Campanha
+              </Button>
             </div>
           </div>
         </div>
 
         {/* GRID PRINCIPAL */}
         <div className="w-full flex justify-center gap-10 flex-wrap">
+
           {/* ARRECADADO */}
           <div className="w-[800px] bg-white rounded-[10px] border border-zinc-400 p-4">
-            <p className="text-zinc-400 font-extrabold text-sm">ARRECADADO</p>
 
+            <p className="text-zinc-400 font-extrabold text-sm">
+              ARRECADADO
+            </p>
+
+            {/* VALORES */}
             <div className="mt-4 flex justify-between items-end text-slate-700">
               <div className="text-xl font-bold">
                 R$ {campaign.raised.toLocaleString("pt-BR")}
@@ -93,7 +92,7 @@ export function CampaignDetails() {
               </div>
             </div>
 
-            {/* INFO */}
+            {/* INFO BOXES */}
             <div className="flex justify-between mt-4 text-xs">
               <div className="bg-slate-100 p-2 rounded">
                 Meta <br />
@@ -114,6 +113,7 @@ export function CampaignDetails() {
 
           {/* APOIO */}
           <div className="w-[380px] bg-white rounded-[10px] border border-zinc-400 p-4">
+
             <p className="text-zinc-400 font-extrabold text-sm">
               APOIAR A CAMPANHA
             </p>
@@ -122,7 +122,7 @@ export function CampaignDetails() {
               {["25", "50", "100"].map((v) => (
                 <button
                   key={v}
-                  className="px-4 py-2 bg-slate-100 rounded text-sm"
+                  className="px-4 py-2 bg-slate-100 rounded text-sm hover:bg-slate-200 transition"
                 >
                   R$ {v}
                 </button>
@@ -137,7 +137,7 @@ export function CampaignDetails() {
               />
             </div>
 
-            <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded font-bold">
+            <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded font-bold hover:bg-blue-700 transition">
               Doar agora
             </button>
           </div>
@@ -149,20 +149,38 @@ export function CampaignDetails() {
             SOBRE A CAMPANHA
           </p>
 
-          <p className="text-sm text-stone-900 mt-2">{campaign.description}</p>
+          <p className="text-sm text-stone-900 mt-2">
+            {campaign.description}
+          </p>
         </div>
 
         {/* TIMELINE */}
         <div className="bg-white rounded-[10px] border border-zinc-400 shadow p-6">
-          {/* HEADER */}
-          <div>
-            <h2 className="text-zinc-400 text-sm font-extrabold tracking-wide">
-              LINHA DO TEMPO
-            </h2>
 
-            <p className="text-stone-900 text-xs font-light mt-1">
-              Atualizações da campanha em ordem cronológica
-            </p>
+          {/* HEADER + ACTIONS */}
+          <div className="flex justify-between items-start">
+
+            {/* TEXTO */}
+            <div>
+              <h2 className="text-zinc-400 text-sm font-extrabold tracking-wide">
+                LINHA DO TEMPO
+              </h2>
+
+              <p className="text-stone-900 text-xs font-light mt-1">
+                Atualizações da campanha em ordem cronológica
+              </p>
+            </div>
+
+            {/* AÇÕES */}
+            <div className="flex items-center gap-3">
+              <Button variant="primary" icon={Plus}>
+                Nova Movimentação
+              </Button>
+
+              <Button variant="outline" icon={Pencil}>
+                Editar Movimentações
+              </Button>
+            </div>
           </div>
 
           {/* LISTA */}
@@ -193,6 +211,7 @@ export function CampaignDetails() {
             />
           </div>
         </div>
+
       </div>
     </AppLayout>
   );
