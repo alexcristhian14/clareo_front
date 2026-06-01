@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import { Pagination } from "../Pagination";
 
 import { TransactionsTable } from "./TransactionsTable";
 
@@ -68,12 +69,19 @@ export function Wallet() {
       <div className="flex justify-end">
         <button className="w-56 p-2.5 bg-blue-600 text-white rounded-[5px] font-bold flex items-center justify-center gap-2">
           <Plus size={18} />
-          Adicionar Contribuidor
+          Nova Transação
         </button>
       </div>
 
       {/* TABELA */}
       <TransactionsTable transactions={transactions} />
+
+      <Pagination
+        currentPage={1}
+        totalPages={5}
+        totalItems={50}
+        onPageChange={(page) => console.log(page)}
+      />
     </div>
   );
 }

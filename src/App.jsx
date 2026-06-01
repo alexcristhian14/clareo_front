@@ -5,12 +5,12 @@ import { OrganizationDetails } from "./pages/OrganizationDetails";
 import { Dashboard } from "./pages/Dashboard";
 import { Contributors } from "./pages/Contributors";
 import { Settings } from "./pages/Settings";
+import { CampaignDetails } from "./pages/CampaingDetais";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         <Route path="/" element={<Dashboard />} />
 
         <Route path="/organizations" element={<Organizations />} />
@@ -21,6 +21,10 @@ export default function App() {
 
         <Route path="/settings" element={<Settings />} />
 
+        <Route
+          path="/organizations/:orgId/campaigns/:campaignId"
+          element={<CampaignDetails />}
+        />
       </Routes>
     </BrowserRouter>
   );

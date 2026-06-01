@@ -10,6 +10,8 @@ import { OrganizationStats } from "../components/organization-details/Organizati
 import { TransactionsTable } from "../components/organization-details/TransactionsTable";
 import { ContributorsTable } from "../components/organization-details/ContributorsTable";
 import { Wallet } from "../components/organization-details/Wallet";
+import { Campaigns } from "../components/organization-details/Campaings";
+import { PaymentMethods } from "../components/organization-details/PaymentMethods";
 
 export function OrganizationDetails() {
   const [tab, setTab] = useState("overview");
@@ -58,12 +60,16 @@ export function OrganizationDetails() {
 
         {/* CAMPAIGNS */}
         {tab === "campaigns" && (
-          <div className="text-slate-700">Campanhas (futuro)</div>
+          <div className="flex flex-col gap-8 w-full">
+            <Campaigns />
+          </div>
         )}
 
         {/* PAYMENTS */}
         {tab === "payments" && (
-          <div className="text-slate-700">Métodos de Pagamento (futuro)</div>
+          <div className="flex flex-col gap-8 w-full">
+            <PaymentMethods />
+          </div>
         )}
       </div>
     </AppLayout>
