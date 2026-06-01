@@ -16,7 +16,7 @@ export function ActionButtons() {
 
       <button
         onClick={handleEdit}
-        className="px-4 py-2 border border-indigo-700 text-indigo-700 rounded-md font-bold flex items-center gap-2"
+        className="px-4 py-2 border border-[#4269B4] text-[#4269B4] rounded-md font-bold flex items-center gap-2"
       >
         <Pencil size={16} />
         Editar Organização
