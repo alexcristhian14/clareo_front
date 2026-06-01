@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "../../Button";
 
 export function CreateContributorModal({ isOpen, onClose, onCreate }) {
   const [name, setName] = useState("");
@@ -101,20 +102,22 @@ export function CreateContributorModal({ isOpen, onClose, onCreate }) {
         </div>
 
         {/* ACTIONS */}
-        <div className="flex justify-between">
-          <button
+        <div className="flex justify-between gap-4 mt-4">
+          <Button
+            variant="outline"
+            className="w-full"
             onClick={onClose}
-            className="w-44 h-8 border border-zinc-400 rounded text-xs font-bold"
           >
             Cancelar
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant="primary"
+            className="w-full"
             onClick={handleSubmit}
-            className="w-44 h-8 bg-blue-600 text-white rounded text-xs font-black"
           >
             Cadastrar
-          </button>
+          </Button>
         </div>
 
       </div>
