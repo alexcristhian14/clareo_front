@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import { Login } from "./pages/Login";
 import { Organizations } from "./pages/Organizations";
 import { OrganizationDetails } from "./pages/OrganizationDetails";
 import { Dashboard } from "./pages/Dashboard";
@@ -11,7 +12,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Login />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/organizations" element={<Organizations />} />
 
