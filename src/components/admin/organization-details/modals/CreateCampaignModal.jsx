@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "../../Button";
+import { Button } from "../../../common/Button";
 
 export function CreateCampaignModal({ isOpen, onClose, onCreate }) {
   const [name, setName] = useState("");

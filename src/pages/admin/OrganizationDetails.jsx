@@ -2,23 +2,24 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useParams } from "react-router-dom";
 
-import AppLayout from "../layouts/AppLayout";
+import AppLayout from "../../layouts/AppLayout";
 
-import { OrganizationHeader } from "../components/organization-details/OrganizationHeader";
-import { OrganizationTabs } from "../components/organization-details/OrganizationTabs";
-import { OrganizationInfo } from "../components/organization-details/OrganizationInfo";
-import { OrganizationStats } from "../components/organization-details/OrganizationStats";
-import { TransactionsTable } from "../components/organization-details/TransactionsTable";
-import { ContributorsTable } from "../components/organization-details/ContributorsTable";
-import { Wallet } from "../components/organization-details/Wallet";
-import { Campaigns } from "../components/organization-details/Campaings";
-import { PaymentMethods } from "../components/organization-details/PaymentMethods";
+import { OrganizationHeader } from "../../components/admin/organization-details/OrganizationHeader";
+import { OrganizationTabs } from "../../components/admin/organization-details/OrganizationTabs";
+import { OrganizationInfo } from "../../components/admin/organization-details/OrganizationInfo";
+import { OrganizationStats } from "../../components/admin/organization-details/OrganizationStats";
+import { TransactionsTable } from "../../components/admin/organization-details/TransactionsTable";
+import { ContributorsTable } from "../../components/admin/organization-details/ContributorsTable";
+import { Wallet } from "../../components/admin/organization-details/Wallet";
+import { Campaigns } from "../../components/admin/organization-details/Campaings";
+import { PaymentMethods } from "../../components/admin/organization-details/PaymentMethods";
 
-import { EditOrganizationModal } from "../components/organizations/EditOrganizationModal";
-import { CreateContributorModal } from "../components/organization-details/modals/CreateContributorModal";
-import { CreateTransactionModal } from "../components/organization-details/modals/CreateTransactionModal";
-import { CreateCampaignModal } from "../components/organization-details/modals/CreateCampaignModal";
-import { CreatePaymentMethodModal } from "../components/organization-details/modals/CreatePaymentMethodModal";
+import { EditOrganizationModal } from "../../components/admin/organizations/EditOrganizationModal";
+
+import { CreateContributorModal } from "../../components/admin/organization-details/modals/CreateContributorModal";
+import { CreateTransactionModal } from "../../components/admin/organization-details/modals/CreateTransactionModal";
+import { CreateCampaignModal } from "../../components/admin/organization-details/modals/CreateCampaignModal";
+import { CreatePaymentMethodModal } from "../../components/admin/organization-details/modals/CreatePaymentMethodModal";
 
 function useOrganizationById(orgId) {
   return {
@@ -136,8 +137,6 @@ export function OrganizationDetails() {
           isOpen={showPaymentModal}
           onClose={() => setShowPaymentModal(false)}
         />
-
-
       </div>
     </AppLayout>
   );

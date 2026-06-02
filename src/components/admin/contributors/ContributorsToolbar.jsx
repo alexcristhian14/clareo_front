@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search, Filter, Plus } from "lucide-react";
-import { Button } from "../Button";
+import { Button } from "../../common/Button";
 
 export function ContributorsToolbar({
   search,
@@ -42,7 +42,7 @@ export function ContributorsToolbar({
         </div>
 
         {/* BUTTON */}
-        <Button icon={Plus} onClick={onAdd} variant="primary" >
+        <Button icon={Plus} onClick={onAdd} variant="primary">
           Novo Contribuidor
         </Button>
       </div>

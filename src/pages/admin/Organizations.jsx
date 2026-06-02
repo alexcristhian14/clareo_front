@@ -1,13 +1,13 @@
 import { toast } from "sonner";
 
-import AppLayout from "../layouts/AppLayout";
-import { OrganizationsToolbar } from "../components/organizations/OrganizationsToolbar";
-import { OrganizationsTable } from "../components/organizations/OrganizationsTable";
-import { CreateOrganizationModal } from "../components/organizations/CreateOrganizationModal";
-import { EditOrganizationModal } from "../components/organizations/EditOrganizationModal";
+import AppLayout from "../../layouts/AppLayout";
+import { OrganizationsToolbar } from "../../components/admin/organizations/OrganizationsToolbar";
+import { OrganizationsTable } from "../../components/admin/organizations/OrganizationsTable";
+import { CreateOrganizationModal } from "../../components/admin/organizations/CreateOrganizationModal";
+import { EditOrganizationModal } from "../../components/admin/organizations/EditOrganizationModal";
 
 import { useState } from "react";
-import { useOrganizations } from "../hooks/useOrganizations";
+import { useOrganizations } from "../../hooks/useOrganizations";
 
 export function Organizations() {
   const {
@@ -45,7 +45,6 @@ export function Organizations() {
       description="Gestão de todas as organizações da plataforma"
     >
       <div className="flex flex-col gap-12">
-
         <OrganizationsToolbar
           search={search}
           setSearch={setSearch}

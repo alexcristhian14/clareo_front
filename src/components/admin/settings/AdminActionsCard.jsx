@@ -1,6 +1,6 @@
 import { Database, RefreshCcw, HardDrive } from "lucide-react";
 
-import { Button } from "../Button";
+import { Button } from "../../common/Button";
 
 export function AdminActionsCard() {
   return (

@@ -1,35 +1,35 @@
-import { Button } from "../Button";
+import { Button } from "../../common/Button";
 
-export function GeneralSettingsCard() {
+export function FinancialSettingsCard() {
   return (
     <div className="bg-white rounded-[10px] border border-zinc-300 p-6 shadow-[0px_7px_30px_-4px_rgba(0,0,0,0.21)]">
 
       <h2 className="text-lg font-bold text-slate-700 mb-6">
-        Configurações Gerais
+        Políticas Financeiras
       </h2>
 
       <div className="flex flex-col gap-4">
 
         <div>
           <label className="block text-sm font-semibold mb-2">
-            Nome da Plataforma
+            Taxa da Plataforma (%)
           </label>
 
           <input
-            type="text"
-            defaultValue="Clareo"
+            type="number"
+            defaultValue="2"
             className="w-full h-10 px-3 rounded-lg border"
           />
         </div>
 
         <div>
           <label className="block text-sm font-semibold mb-2">
-            E-mail de Suporte
+            Valor Mínimo de Transação
           </label>
 
           <input
-            type="email"
-            defaultValue="suporte@clareo.com"
+            type="number"
+            defaultValue="10"
             className="w-full h-10 px-3 rounded-lg border"
           />
         </div>

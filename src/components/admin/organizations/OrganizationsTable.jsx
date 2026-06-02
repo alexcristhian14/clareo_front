@@ -1,5 +1,5 @@
 import { OrganizationRow } from "./OrganizationRow";
-import { Pagination } from "../Pagination";
+import { Pagination } from "../../common/Pagination";
 
 export function OrganizationsTable({
   organizations,

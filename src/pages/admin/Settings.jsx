@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-import AppLayout from "../layouts/AppLayout";
+import AppLayout from "../../layouts/AppLayout";
 
-import { GeneralSettingsCard } from "../components/settings/GeneralSettingsCard";
-import { FinancialSettingsCard } from "../components/settings/FinancialSettingsCard";
-import { NotificationSettingsCard } from "../components/settings/NotificationSettingsCard";
-import { SecuritySettingsCard } from "../components/settings/SecuritySettingsCard";
-import { AdminActionsCard } from "../components/settings/AdminActionsCard";
+import { GeneralSettingsCard } from "../../components/admin/settings/GeneralSettingsCard";
+import { FinancialSettingsCard } from "../../components/admin/settings/FinancialSettingsCard";
+import { NotificationSettingsCard } from "../../components/admin/settings/NotificationSettingsCard";
+import { SecuritySettingsCard } from "../../components/admin/settings/SecuritySettingsCard";
+import { AdminActionsCard } from "../../components/admin/settings/AdminActionsCard";
 
 export function Settings() {
   const [settings, setSettings] = useState({

@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Login } from "./pages/Login";
-import { Organizations } from "./pages/Organizations";
-import { OrganizationDetails } from "./pages/OrganizationDetails";
-import { Dashboard } from "./pages/Dashboard";
-import { Contributors } from "./pages/Contributors";
-import { Settings } from "./pages/Settings";
-import { CampaignDetails } from "./pages/CampaingDetais";
+
+import { Dashboard } from "./pages/admin/Dashboard";
+import { Organizations } from "./pages/admin/Organizations";
+import { OrganizationDetails } from "./pages/admin/OrganizationDetails";
+import { Contributors } from "./pages/admin/Contributors";
+import { Settings } from "./pages/admin/Settings";
+import { CampaignDetails } from "./pages/admin/CampaingDetais";
 
 export default function App() {
   return (

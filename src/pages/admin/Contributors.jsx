@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import AppLayout from "../layouts/AppLayout";
+import AppLayout from "../../layouts/AppLayout";
 
-import { ContributorsToolbar } from "../components/contributors/ContributorsToolbar";
-import { ContributorsTable } from "../components/contributors/ContributorsTable";
-import { CreateContributorModal } from "../components/organization-details/modals/CreateContributorModal";
+import { ContributorsToolbar } from "../../components/admin/contributors/ContributorsToolbar";
+import { ContributorsTable } from "../../components/admin/contributors/ContributorsTable";
+import { CreateContributorModal } from "../../components/admin/organization-details/modals/CreateContributorModal";
 
 // MOCK (troca por API depois)
 const mockContributors = [
@@ -37,7 +37,7 @@ export function Contributors() {
 
   // filtro
   const filteredContributors = contributors.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase())
+    c.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   // criar contribuidor (mock)
@@ -57,7 +57,6 @@ export function Contributors() {
       description="Visualize e gerencie os contribuidores da plataforma"
     >
       <div className="flex flex-col gap-6">
-
         {/* TOOLBAR */}
         <ContributorsToolbar
           search={search}
@@ -74,7 +73,6 @@ export function Contributors() {
           onClose={() => setShowModal(false)}
           onCreate={handleCreate}
         />
-
       </div>
     </AppLayout>
   );

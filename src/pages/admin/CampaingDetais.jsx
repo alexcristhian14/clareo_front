@@ -1,8 +1,10 @@
 import { useParams } from "react-router-dom";
-import { TimelineItem } from "../components/organization-details/TimelineItem";
-import { Button } from "../components/Button";
+
+import { TimelineItem } from "../../components/admin/organization-details/TimelineItem";
+import { Button } from "../../components/common/Button";
+
 import { X, Pencil, Plus } from "lucide-react";
-import AppLayout from "../layouts/AppLayout";
+import AppLayout from "../../layouts/AppLayout";
 
 export function CampaignDetails() {
   const { orgId, campaignId } = useParams();
@@ -26,11 +28,9 @@ export function CampaignDetails() {
       description="Detalhamento da campanha"
     >
       <div className="w-full flex flex-col gap-6">
-
         {/* HEADER BANNER */}
         <div className="w-full p-2.5">
           <div className="bg-white rounded-[10px] border border-zinc-400 p-6 flex justify-between items-start">
-
             {/* TITULO */}
             <div className="flex flex-col">
               <h1 className="text-slate-700 text-3xl font-extrabold">
@@ -56,13 +56,9 @@ export function CampaignDetails() {
 
         {/* GRID PRINCIPAL */}
         <div className="w-full flex justify-center gap-10 flex-wrap">
-
           {/* ARRECADADO */}
           <div className="w-[800px] bg-white rounded-[10px] border border-zinc-400 p-4">
-
-            <p className="text-zinc-400 font-extrabold text-sm">
-              ARRECADADO
-            </p>
+            <p className="text-zinc-400 font-extrabold text-sm">ARRECADADO</p>
 
             {/* VALORES */}
             <div className="mt-4 flex justify-between items-end text-slate-700">
@@ -113,7 +109,6 @@ export function CampaignDetails() {
 
           {/* APOIO */}
           <div className="w-[380px] bg-white rounded-[10px] border border-zinc-400 p-4">
-
             <p className="text-zinc-400 font-extrabold text-sm">
               APOIAR A CAMPANHA
             </p>
@@ -149,17 +144,13 @@ export function CampaignDetails() {
             SOBRE A CAMPANHA
           </p>
 
-          <p className="text-sm text-stone-900 mt-2">
-            {campaign.description}
-          </p>
+          <p className="text-sm text-stone-900 mt-2">{campaign.description}</p>
         </div>
 
         {/* TIMELINE */}
         <div className="bg-white rounded-[10px] border border-zinc-400 shadow p-6">
-
           {/* HEADER + ACTIONS */}
           <div className="flex justify-between items-start">
-
             {/* TEXTO */}
             <div>
               <h2 className="text-zinc-400 text-sm font-extrabold tracking-wide">
@@ -211,7 +202,6 @@ export function CampaignDetails() {
             />
           </div>
         </div>
-
       </div>
     </AppLayout>
   );

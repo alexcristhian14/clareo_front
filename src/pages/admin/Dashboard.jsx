@@ -1,10 +1,10 @@
-import AppLayout from "../layouts/AppLayout";
+import AppLayout from "../../layouts/AppLayout";
 
-import { DashboardStats } from "../components/dashboard/DashboardStats";
-import { FinanceLineChart } from "../components/dashboard/FinanceLineChart";
-import { CampaignPieChart } from "../components/dashboard/CampaignPieChart";
-import { AlertsPanel } from "../components/dashboard/AlertsPanel";
-import { RecentTransactions } from "../components/dashboard/RecentTransactions";
+import { DashboardStats } from "../../components/admin/dashboard/DashboardStats";
+import { FinanceLineChart } from "../../components/admin/dashboard/FinanceLineChart";
+import { CampaignPieChart } from "../../components/admin/dashboard/CampaignPieChart";
+import { AlertsPanel } from "../../components/admin/dashboard/AlertsPanel";
+import { RecentTransactions } from "../../components/admin/dashboard/RecentTransactions";
 
 export function Dashboard() {
   return (

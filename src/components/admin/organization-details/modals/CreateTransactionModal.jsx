@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "../../Button";
+import { Button } from "../../../common/Button";
 
 export function CreateTransactionModal({ isOpen, onClose, onCreate }) {
   const [type, setType] = useState("");
@@ -26,9 +26,7 @@ export function CreateTransactionModal({ isOpen, onClose, onCreate }) {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      
       <div className="w-[497px] bg-white rounded-[10px] p-6 shadow-xl flex flex-col gap-6">
-
         {/* HEADER */}
         <div>
           <h2 className="text-xl font-semibold">NOVA TRANSAÇÃO</h2>
@@ -56,9 +54,7 @@ export function CreateTransactionModal({ isOpen, onClose, onCreate }) {
 
         {/* VALUE */}
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-bold text-blue-600">
-            Valor (BRL)
-          </label>
+          <label className="text-xs font-bold text-blue-600">Valor (BRL)</label>
 
           <input
             value={value}
@@ -70,7 +66,6 @@ export function CreateTransactionModal({ isOpen, onClose, onCreate }) {
 
         {/* DATE + TIME */}
         <div className="flex gap-3">
-
           <div className="flex flex-col gap-2 w-full">
             <label className="text-xs font-bold text-blue-600">Data</label>
 
@@ -96,23 +91,13 @@ export function CreateTransactionModal({ isOpen, onClose, onCreate }) {
 
         {/* ACTIONS */}
         <div className="flex justify-between gap-3">
-
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={onClose}
-          >
+          <Button variant="outline" className="w-full" onClick={onClose}>
             Cancelar
           </Button>
 
-          <Button
-            variant="primary"
-            className="w-full"
-            onClick={handleSubmit}
-          >
+          <Button variant="primary" className="w-full" onClick={handleSubmit}>
             Realizar Transação
           </Button>
-
         </div>
       </div>
     </div>

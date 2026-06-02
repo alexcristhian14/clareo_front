@@ -1,5 +1,5 @@
-import { Sidebar } from "../components/sidebar/Sidebar";
-import { Navbar } from "../components/Navbar";
+import { Sidebar } from "../components/common/Sidebar";
+import { Navbar } from "../components/common/Navbar";
 
 export default function AppLayout({ children, title, description }) {
   return (
