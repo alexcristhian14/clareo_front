@@ -16,6 +16,8 @@ import { CampaignDetails } from "./pages/admin/CampaignDetais";
 import { Dashboard as OrganizationDashboard } from "./pages/organization/Dashboard";
 import { Campaigns as OrganizationCampaigns } from "./pages/organization/Campaigns";
 import { CampaignDetails as OrganizationCampaignDetails } from "./pages/organization/CampaignDetails";
+import { Contributors as OrganizationContributors } from "./pages/organization/Contributors";
+import { Settings as OrganizationSettings } from "./pages/organization/Settings";
 
 export default function App() {
   return (
@@ -58,6 +60,18 @@ export default function App() {
           path="/organization/campaigns/:campaignId"
           element={<OrganizationCampaignDetails />}
         />
+
+        <Route
+          path="/organization/contributors"
+          element={<OrganizationContributors />}
+        />
+
+        <Route 
+          path="/organization/settings"
+          element={<OrganizationSettings />}
+        
+        />
+
       </Routes>
     </BrowserRouter>
   );

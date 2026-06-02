@@ -1,12 +1,15 @@
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 import AdminLayout from "../../layouts/AdminLayout";
 import { CampaignDetailsBase } from "../../features/campaign/CampaignDetailsBase";
+import { EditCampaignModal } from "../../components/common/modals/EditCampaignModal";
+import { DeleteCampaignModal } from "../../components/common/modals/DeleteCampaignModal";
 
 export function CampaignDetails() {
-  const { orgId, campaignId } = useParams();
+  const { campaignId } = useParams();
 
-  const campaign = {
+  const [campaign, setCampaign] = useState({
     title: "Acompanhamento Médico Itinerante",
     organization: "Instituto Saúde Viva",
     raised: 25000,
@@ -15,14 +18,18 @@ export function CampaignDetails() {
     daysLeft: 18,
     description:
       "Equipe médica volante para atender comunidades rurais sem acesso a postos de saúde.",
-  };
+  });
 
-  function handleEdit() {
-    console.log("Editar campanha");
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  function handleEditSave(updated) {
+    setCampaign(updated);
   }
 
-  function handleClose() {
-    console.log("Encerrar campanha");
+  function handleDelete() {
+    console.log("Excluir campanha:", campaignId);
+    setIsDeleteOpen(false);
   }
 
   return (
@@ -33,8 +40,23 @@ export function CampaignDetails() {
       <CampaignDetailsBase
         mode="admin"
         campaign={campaign}
-        onEdit={handleEdit}
-        onClose={handleClose}
+        onEdit={() => setIsEditOpen(true)}
+        onClose={() => setIsDeleteOpen(true)}
+      />
+
+      {/* MODAL EDITAR */}
+      <EditCampaignModal
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        campaign={campaign}
+        onSave={handleEditSave}
+      />
+
+      {/* MODAL EXCLUIR */}
+      <DeleteCampaignModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={handleDelete}
       />
     </AdminLayout>
   );

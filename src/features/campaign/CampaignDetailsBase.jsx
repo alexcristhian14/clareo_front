@@ -84,7 +84,7 @@ export function CampaignDetailsBase({
       {/* GRID */}
       <div className="w-full flex justify-center gap-10 flex-wrap">
         {/* ARRECADADO */}
-        <div className="w-[800px] bg-white rounded-[10px] border border-zinc-400 p-4">
+        <div className="w-[700px] bg-white rounded-[10px] border border-zinc-400 p-4">
           <p className="text-zinc-400 font-extrabold text-sm">ARRECADADO</p>
 
           <div className="mt-4 flex justify-between items-end text-slate-700">
@@ -114,7 +114,7 @@ export function CampaignDetailsBase({
           </div>
 
           <div className="flex justify-between mt-4 text-xs">
-            <div className="bg-slate-100 p-2 rounded">
+            <div className="bg-slate-100 p-4 rounded">
               Meta <br />
               <b>{Math.round(progress)}%</b>
             </div>
@@ -193,7 +193,7 @@ export function CampaignDetailsBase({
 
         <div className="mt-6 flex flex-col gap-6">
           {timeline.map((item) => (
-            <TimelineItem key={item.id} {...item} />
+            <TimelineItem key={item.id} {...item} onOpenFile={handleOpenReceipt}/>
           ))}
         </div>
       </div>
