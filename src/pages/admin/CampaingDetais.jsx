@@ -4,7 +4,7 @@ import { TimelineItem } from "../../components/admin/organization-details/Timeli
 import { Button } from "../../components/common/Button";
 
 import { X, Pencil, Plus } from "lucide-react";
-import AppLayout from "../../layouts/AppLayout";
+import AdminLayout from "../../layouts/AdminLayout";
 
 export function CampaignDetails() {
   const { orgId, campaignId } = useParams();
@@ -23,7 +23,7 @@ export function CampaignDetails() {
   const progress = (campaign.raised / campaign.goal) * 100;
 
   return (
-    <AppLayout
+    <AdminLayout
       title={campaign.organization}
       description="Detalhamento da campanha"
     >
@@ -203,6 +203,6 @@ export function CampaignDetails() {
           </div>
         </div>
       </div>
-    </AppLayout>
+    </AdminLayout>
   );
 }

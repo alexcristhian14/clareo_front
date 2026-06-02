@@ -11,7 +11,7 @@ export function LoginForm() {
   function handleLogin(e) {
     e.preventDefault();
 
-    navigate("/dashboard");
+    navigate("organization/dashboard");
   }
 
   //  function handleLogin(e) {

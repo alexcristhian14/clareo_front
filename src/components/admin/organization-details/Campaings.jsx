@@ -47,7 +47,7 @@ export function Campaigns({ onAddCampaign }) {
   ];
 
   const handleDetails = (campaignId) => {
-    navigate(`/organizations/${orgId}/campaigns/${campaignId}`);
+    navigate(`/admin/organizations/${orgId}/campaigns/${campaignId}`);
   };
 
   return (

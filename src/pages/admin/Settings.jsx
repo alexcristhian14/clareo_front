@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import AppLayout from "../../layouts/AppLayout";
+import AdminLayout from "../../layouts/AdminLayout";
 
 import { GeneralSettingsCard } from "../../components/admin/settings/GeneralSettingsCard";
 import { FinancialSettingsCard } from "../../components/admin/settings/FinancialSettingsCard";
@@ -37,7 +37,7 @@ export function Settings() {
   }
 
   return (
-    <AppLayout
+    <AdminLayout
       title="Configurações"
       description="Gerencie as configurações da plataforma"
     >
@@ -74,6 +74,6 @@ export function Settings() {
         <AdminActionsCard />
 
       </div>
-    </AppLayout>
+    </AdminLayout>
   );
 }

@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 
-import AppLayout from "../../layouts/AppLayout";
+import AdminLayout from "../../layouts/AdminLayout";
+
 import { OrganizationsToolbar } from "../../components/admin/organizations/OrganizationsToolbar";
 import { OrganizationsTable } from "../../components/admin/organizations/OrganizationsTable";
 import { CreateOrganizationModal } from "../../components/admin/organizations/CreateOrganizationModal";
@@ -40,7 +41,7 @@ export function Organizations() {
   }
 
   return (
-    <AppLayout
+    <AdminLayout
       title="Organizações"
       description="Gestão de todas as organizações da plataforma"
     >
@@ -73,6 +74,6 @@ export function Organizations() {
           onCreate={handleCreateOrganization}
         />
       </div>
-    </AppLayout>
+    </AdminLayout>
   );
 }

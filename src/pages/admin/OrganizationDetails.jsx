@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { useParams } from "react-router-dom";
 
-import AppLayout from "../../layouts/AppLayout";
+import AdminLayout from "../../layouts/AdminLayout";
 
 import { OrganizationHeader } from "../../components/admin/organization-details/OrganizationHeader";
 import { OrganizationTabs } from "../../components/admin/organization-details/OrganizationTabs";
@@ -46,7 +46,7 @@ export function OrganizationDetails() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   return (
-    <AppLayout
+    <AdminLayout
       title="Detalhes da Organização"
       description="Visualize e gerencie a organização"
     >
@@ -138,6 +138,6 @@ export function OrganizationDetails() {
           onClose={() => setShowPaymentModal(false)}
         />
       </div>
-    </AppLayout>
+    </AdminLayout>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-import logo from "../../assets/logo.svg";
+import logo from "../../../assets/logo.svg";
 
 import {
   LayoutDashboard,
@@ -11,7 +11,7 @@ import {
   LogOut,
 } from "lucide-react";
 
-export function Sidebar() {
+export function AdminSidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -71,28 +71,28 @@ export function Sidebar() {
         <div className="w-full flex flex-col gap-4">
 
           <SidebarItem
-            to="/"
+            to="/admin/dashboard"
             icon={<LayoutDashboard size={24} />}
             label="Dashboard"
             isOpen={isOpen}
           />
 
           <SidebarItem
-            to="/organizations"
+            to="/admin/organizations"
             icon={<Building2 size={24} />}
             label="Organizations"
             isOpen={isOpen}
           />
 
           <SidebarItem
-            to="/contributors"
+            to="/admin/contributors"
             icon={<Users size={24} />}
             label="Contributors"
             isOpen={isOpen}
           />
 
           <SidebarItem
-            to="/settings"
+            to="/admin/settings"
             icon={<Settings size={24} />}
             label="Configurações"
             isOpen={isOpen}

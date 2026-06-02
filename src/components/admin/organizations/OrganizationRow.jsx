@@ -5,7 +5,7 @@ export function OrganizationRow({ org }) {
   const navigate = useNavigate();
 
   function handleDetails() {
-    navigate(`/organizations/${org.id}`);
+    navigate(`/admin/organizations/${org.id}`);
   }
 
   return (

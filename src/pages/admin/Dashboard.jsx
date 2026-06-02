@@ -1,4 +1,4 @@
-import AppLayout from "../../layouts/AppLayout";
+import AdminLayout from "../../layouts/AdminLayout";
 
 import { DashboardStats } from "../../components/admin/dashboard/DashboardStats";
 import { FinanceLineChart } from "../../components/admin/dashboard/FinanceLineChart";
@@ -8,7 +8,7 @@ import { RecentTransactions } from "../../components/admin/dashboard/RecentTrans
 
 export function Dashboard() {
   return (
-    <AppLayout
+    <AdminLayout
       title="Dashboard"
       description="Visão geral financeira da plataforma"
     >
@@ -30,6 +30,6 @@ export function Dashboard() {
         <RecentTransactions />
 
       </div>
-    </AppLayout>
+    </AdminLayout>
   );
 }

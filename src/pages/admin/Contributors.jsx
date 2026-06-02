@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AppLayout from "../../layouts/AppLayout";
+import AdminLayout from "../../layouts/AdminLayout";
 
 import { ContributorsToolbar } from "../../components/admin/contributors/ContributorsToolbar";
 import { ContributorsTable } from "../../components/admin/contributors/ContributorsTable";
@@ -52,7 +52,7 @@ export function Contributors() {
   }
 
   return (
-    <AppLayout
+    <AdminLayout
       title="Contribuidores"
       description="Visualize e gerencie os contribuidores da plataforma"
     >
@@ -74,6 +74,6 @@ export function Contributors() {
           onCreate={handleCreate}
         />
       </div>
-    </AppLayout>
+    </AdminLayout>
   );
 }

@@ -1,20 +1,15 @@
-import { Sidebar } from "../components/common/Sidebar";
+import { AdminSidebar } from "../components/admin/sidebar/AdminSidebar";
 import { Navbar } from "../components/common/Navbar";
 
-export default function AppLayout({ children, title, description }) {
+export default function AdminLayout({ children, title, description }) {
   return (
     <div className="flex min-h-screen bg-gray-100">
-
-      <Sidebar />
+      <AdminSidebar />
 
       <div className="flex flex-col flex-1">
-
         <Navbar title={title} description={description} />
 
-        <main className="flex-1 p-6 overflow-auto">
-          {children}
-        </main>
-
+        <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
     </div>
   );
