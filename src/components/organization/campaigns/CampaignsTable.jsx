@@ -1,10 +1,12 @@
-import { Eye, Pencil, Trash2, ChevronRight } from "lucide-react";
-
-import { Button } from "../../common/Button";
+import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function CampaignsTable({ campaigns }) {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white rounded-[10px] border border-zinc-300 shadow-[0px_7px_30px_-4px_rgba(0,0,0,0.21)] overflow-hidden">
+      {/* HEADER */}
       <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_220px] px-8 py-4 bg-slate-100 font-semibold text-slate-800">
         <span>NOME</span>
         <span>META</span>
@@ -15,6 +17,7 @@ export function CampaignsTable({ campaigns }) {
         <span className="text-center">AÇÕES</span>
       </div>
 
+      {/* ROWS */}
       {campaigns.map((campaign) => {
         const progress = (campaign.raised / campaign.goal) * 100;
 
@@ -23,11 +26,11 @@ export function CampaignsTable({ campaigns }) {
             key={campaign.id}
             className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_220px] px-8 py-4 border-t items-center"
           >
-            <span>{campaign.name}</span>
+            <span className="font-medium">{campaign.name}</span>
 
-            <span>R$ {campaign.goal.toLocaleString()}</span>
+            <span>R$ {campaign.goal.toLocaleString("pt-BR")}</span>
 
-            <span>R$ {campaign.raised.toLocaleString()}</span>
+            <span>R$ {campaign.raised.toLocaleString("pt-BR")}</span>
 
             <span>{progress.toFixed(0)}%</span>
 
@@ -39,9 +42,13 @@ export function CampaignsTable({ campaigns }) {
               </span>
             </span>
 
-            <div className="flex justify-center gap-2">
+            {/* ACTIONS */}
+            <div className="flex justify-center">
               <button
-                className="flex items-center gap-1 text-blue-600 font-semibold"
+                onClick={() =>
+                  navigate(`/organization/campaigns/${campaign.id}`)
+                }
+                className="flex items-center gap-1 text-blue-600 font-semibold hover:underline"
               >
                 Ver detalhes
                 <ChevronRight size={16} />

@@ -3,6 +3,7 @@ import {
   BanknoteArrowUp,
   Flag,
   FileCheck,
+  FileText,
 } from "lucide-react";
 
 const typeConfig = {
@@ -34,12 +35,13 @@ export function TimelineItem({
   description,
   value,
   date,
-  receiptText,
+  file,
+  onOpenFile, 
 }) {
   const config = typeConfig[type] || typeConfig.info;
   const Icon = config.icon;
 
-    return (
+  return (
     <div className="flex gap-4">
       {/* ICON */}
       <div className="flex flex-col items-center">
@@ -54,6 +56,7 @@ export function TimelineItem({
 
       {/* CONTENT */}
       <div className="flex-1 flex flex-col gap-1">
+
         {/* HEADER */}
         <div className="flex justify-between">
           <h3 className="text-sm font-semibold text-stone-900">
@@ -72,16 +75,30 @@ export function TimelineItem({
 
         {/* VALUE + RECEIPT */}
         <div className="flex justify-between items-center mt-1">
+
+          {/* VALUE */}
           <span className={`text-xs font-semibold ${config.valueColor}`}>
             {value}
           </span>
 
-          {receiptText && (
-            <button className="flex items-center gap-1 text-[11px] text-blue-600 hover:underline">
-              <FileCheck className="w-3.5 h-3.5" />
-              {receiptText}
+          {/* RECEIPT */}
+          {file && (
+            <button
+              onClick={() => onOpenFile?.(file)}
+              className="
+                flex items-center gap-1
+                text-[11px]
+                text-blue-600
+                font-semibold
+                hover:underline
+                transition
+              "
+            >
+              <FileText className="w-3.5 h-3.5" />
+              Ver comprovante
             </button>
           )}
+
         </div>
       </div>
     </div>
