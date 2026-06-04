@@ -27,6 +27,7 @@ import { CampaignDetails as DonorCampaignDetails } from "./pages/donor/CampaignD
 import { OrganizationDetails as DonorOrganizationDetails } from "./pages/donor/OrganizationDetails";
 import { Organizations as DonorOrganizations } from "./pages/donor/Organizations";
 import { Wallet as DonorWallet } from "./pages/donor/Wallet";
+import { Settings as DonorSettings } from "./pages/donor/Settings";
 
 export default function App() {
   return (
@@ -101,6 +102,8 @@ export default function App() {
         />
 
         <Route path="/donor/wallet" element={<DonorWallet />} />
+
+        <Route path="/donor/settings" element={<DonorSettings />} />
       </Routes>
     </BrowserRouter>
   );
