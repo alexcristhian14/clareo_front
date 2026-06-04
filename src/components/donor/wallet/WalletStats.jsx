@@ -1,4 +1,5 @@
 export function WalletStats({ stats }) {
+  console.log("STATS RECEBIDO", stats);
   return (
     <div className="grid grid-cols-3 gap-6">
       <div className="bg-white rounded-[10px] border border-zinc-300 p-5">

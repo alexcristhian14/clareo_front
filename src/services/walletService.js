@@ -7,15 +7,24 @@ function ensureWallet(userId) {
       transactions: [],
     };
   }
+
   return wallets[userId];
 }
 
 export async function getBalance(userId) {
-  return ensureWallet(userId).balance;
+  const balance = ensureWallet(userId).balance;
+
+  console.log("getBalance()", balance);
+
+  return balance;
 }
 
 export async function getTransactions(userId) {
-  return ensureWallet(userId).transactions;
+  const transactions = ensureWallet(userId).transactions;
+
+  console.log("getTransactions()", transactions);
+
+  return transactions;
 }
 
 export async function addBalance({ userId, amount, method }) {
@@ -26,11 +35,14 @@ export async function addBalance({ userId, amount, method }) {
   wallet.balance += value;
 
   wallet.transactions.unshift({
+    id: Date.now(),
     type: "recharge",
     amount: value,
     method,
     date: new Date().toISOString(),
   });
+
+  console.log("WALLET APÓS RECARGA", wallet);
 
   return wallet.balance;
 }
@@ -51,11 +63,14 @@ export async function donate({ userId, campaignId, amount }) {
   wallet.balance -= value;
 
   wallet.transactions.unshift({
+    id: Date.now(),
     type: "donation",
     campaignId,
     amount: value,
     date: new Date().toISOString(),
   });
+
+  console.log("WALLET APÓS DOAÇÃO", wallet);
 
   return wallet.balance;
 }

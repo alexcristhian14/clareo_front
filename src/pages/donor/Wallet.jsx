@@ -12,12 +12,13 @@ import { AddBalanceModal } from "../../components/common/modals/AddBalanceModal"
 import { AddPaymentMethodModal } from "../../components/common/modals/AddPaymentMethodModal";
 
 export function Wallet() {
-  const {
+  const { balance, transactions, stats, addBalance } = useWallet();
+
+  console.log("WALLET PAGE", {
     balance,
     transactions,
     stats,
-    addBalance,
-  } = useWallet();
+  });
 
   const [isBalanceOpen, setIsBalanceOpen] = useState(false);
   const [isMethodOpen, setIsMethodOpen] = useState(false);
@@ -34,13 +35,20 @@ export function Wallet() {
   ]);
 
   // 💰 RECARGA (COMPATÍVEL COM CONTEXT)
-  function handleAddBalance(data) {
+  async function handleAddBalance(data) {
+    console.log("MODAL ENVIOU", data);
+
     if (!data) return;
 
     const amount = Number(data.amount);
     const method = data.method;
 
-    addBalance(amount, method);
+    console.log("CHAMANDO addBalance", amount, method);
+
+    await addBalance(amount, method);
+
+    console.log("addBalance FINALIZOU");
+
     setIsBalanceOpen(false);
   }
 
@@ -64,7 +72,6 @@ export function Wallet() {
       description="Gerencie seu saldo e acompanhe suas movimentações"
     >
       <div className="flex flex-col gap-6">
-
         {/* SALDO */}
         <WalletBalanceCard
           balance={balance}
@@ -95,7 +102,6 @@ export function Wallet() {
           onClose={() => setIsMethodOpen(false)}
           onSubmit={handleAddMethod}
         />
-
       </div>
     </DonorLayout>
   );

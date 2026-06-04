@@ -28,17 +28,27 @@ export function WalletProvider({ children }) {
       return;
     }
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const [bal, tx] = await Promise.all([
-      getBalance(userId),
-      getTransactions(userId),
-    ]);
+      const [bal, tx] = await Promise.all([
+        getBalance(userId),
+        getTransactions(userId),
+      ]);
 
-    setBalance(Number(bal));
-    setTransactions(Array.isArray(tx) ? tx : []);
+      console.log("BALANCE RETORNADO", bal);
+      console.log("TRANSACTIONS RETORNADAS", tx);
 
-    setLoading(false);
+      setBalance(Number(bal || 0));
+      setTransactions(Array.isArray(tx) ? [...tx] : []);
+    } catch (error) {
+      console.error("Erro ao carregar carteira:", error);
+
+      setBalance(0);
+      setTransactions([]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -46,7 +56,15 @@ export function WalletProvider({ children }) {
   }, [userId]);
 
   async function addBalance(amount, method) {
-    if (!userId) return;
+    console.log("CONTEXT addBalance", {
+      userId,
+      amount,
+      method,
+    });
+
+    if (!userId) {
+      throw new Error("Usuário não autenticado");
+    }
 
     await addBalanceService({
       userId,
@@ -54,11 +72,17 @@ export function WalletProvider({ children }) {
       method,
     });
 
+    console.log("SERVICE EXECUTOU");
+
     await loadWallet();
+
+    console.log("LOAD WALLET EXECUTOU");
   }
 
-  async function donate(campaignId, amount, campaignTitle) {
-    if (!userId) return;
+  async function donate(campaignId, amount) {
+    if (!userId) {
+      throw new Error("Usuário não autenticado");
+    }
 
     await donateService({
       userId,
@@ -80,9 +104,20 @@ export function WalletProvider({ children }) {
       .filter((t) => t.type === "recharge")
       .reduce((acc, t) => acc + Number(t.amount || 0), 0);
 
+    const campaigns = new Set(
+      safe.filter((t) => t.type === "donation").map((t) => t.campaignId),
+    ).size;
+
+    console.log("TRANSACTIONS", transactions);
+    console.log("STATS", {
+      donated,
+      recharges,
+      campaigns,
+    });
     return {
       donated,
       recharges,
+      campaigns,
       transactionsCount: safe.length,
     };
   }, [transactions]);
@@ -94,8 +129,10 @@ export function WalletProvider({ children }) {
         transactions,
         stats,
         loading,
+
         addBalance,
         donate,
+
         reload: loadWallet,
       }}
     >
@@ -105,5 +142,11 @@ export function WalletProvider({ children }) {
 }
 
 export function useWallet() {
-  return useContext(WalletContext);
+  const context = useContext(WalletContext);
+
+  if (!context) {
+    throw new Error("useWallet must be used within WalletProvider");
+  }
+
+  return context;
 }
