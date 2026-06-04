@@ -11,7 +11,7 @@ export function WalletBalanceCard({ balance, onAddBalance }) {
           </p>
 
           <h2 className="text-4xl font-bold text-slate-800 mt-2">
-            R$ {balance.toLocaleString("pt-BR")}
+            R$ {(Number(balance) || 0).toLocaleString("pt-BR")}
           </h2>
         </div>
 

@@ -5,32 +5,30 @@ import DonorLayout from "../../layouts/DonorLayout";
 import { CampaignDetailsBase } from "../../features/campaign/CampaignDetailsBase";
 import { DonationModal } from "../../components/donor/modals/DonationModal";
 
+import { useCampaigns } from "../../contexts/CampaignContext";
+
 export function CampaignDetails() {
   const { campaignId } = useParams();
+  const { campaigns, updateCampaignAfterDonation } = useCampaigns();
 
   const [isDonateOpen, setIsDonateOpen] = useState(false);
 
-  const campaign = {
-    id: campaignId,
-    title: "Saúde para Todos",
-    organization: "Instituto Saúde Viva",
-    raised: 25000,
-    goal: 50000,
-    donors: 142,
-    daysLeft: 18,
-    description:
-      "Equipe médica volante para atender comunidades rurais sem acesso a postos de saúde.",
-  };
+  // 🔥 pega campanha REAL do context
+  const campaign = campaigns.find(
+    (c) => String(c.id) === String(campaignId)
+  );
 
-  function handleDonate({ amount, method }) {
-    console.log("DOAÇÃO:", {
-      amount,
-      method,
-      campaignId,
-    });
+  if (!campaign) {
+    return (
+      <DonorLayout title="Carregando..." description="">
+        <p>Carregando campanha...</p>
+      </DonorLayout>
+    );
+  }
 
-    // aqui depois vira API:
-    // await api.post("/donations", {...})
+  async function handleDonate({ amount }) {
+    // ⚠️ aqui você conecta com wallet depois
+    updateCampaignAfterDonation(campaign.id, amount);
 
     setIsDonateOpen(false);
   }
@@ -41,7 +39,7 @@ export function CampaignDetails() {
       description="Conheça e apoie esta causa"
     >
       <div className="relative">
-        {/* CAMPANHA */}
+
         <CampaignDetailsBase
           mode="donor"
           campaign={campaign}
@@ -50,13 +48,13 @@ export function CampaignDetails() {
           onViewOrganization={() => console.log("ver organização")}
         />
 
-        {/* MODAL NOVO (STEP FLOW) */}
         <DonationModal
           isOpen={isDonateOpen}
           onClose={() => setIsDonateOpen(false)}
           campaign={campaign}
           onConfirm={handleDonate}
         />
+
       </div>
     </DonorLayout>
   );

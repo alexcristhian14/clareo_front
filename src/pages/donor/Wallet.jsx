@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import DonorLayout from "../../layouts/DonorLayout";
 
+import { useWallet } from "../../contexts/WalletContext";
+
 import { WalletBalanceCard } from "../../components/donor/wallet/WalletBalanceCard";
 import { WalletStats } from "../../components/donor/wallet/WalletStats";
 import { PaymentMethodsCard } from "../../components/donor/wallet/PaymentMethodsCard";
@@ -10,12 +12,15 @@ import { AddBalanceModal } from "../../components/common/modals/AddBalanceModal"
 import { AddPaymentMethodModal } from "../../components/common/modals/AddPaymentMethodModal";
 
 export function Wallet() {
+  const {
+    balance,
+    transactions,
+    stats,
+    addBalance,
+  } = useWallet();
+
   const [isBalanceOpen, setIsBalanceOpen] = useState(false);
   const [isMethodOpen, setIsMethodOpen] = useState(false);
-
-  const [balance, setBalance] = useState(1000);
-
-  const [transactions, setTransactions] = useState([]);
 
   const [methods, setMethods] = useState([
     {
@@ -28,48 +33,29 @@ export function Wallet() {
     },
   ]);
 
-  const stats = {
-    donated: 520,
-    recharges: 870,
-    campaigns: 7,
-  };
+  // 💰 RECARGA (COMPATÍVEL COM CONTEXT)
+  function handleAddBalance(data) {
+    if (!data) return;
 
-  // =========================
-  // ADD BALANCE (API READY)
-  // =========================
-  function handleAddBalance({ amount, method }) {
-    const value = Number(amount);
+    const amount = Number(data.amount);
+    const method = data.method;
 
-    if (!value || value <= 0) return;
-
-    setBalance((prev) => prev + value);
-
-    setTransactions((prev) => [
-      {
-        id: Date.now(),
-        type: "credit",
-        title: "Recarga de saldo",
-        amount: value,
-        method,
-        createdAt: new Date().toISOString(),
-      },
-      ...prev,
-    ]);
+    addBalance(amount, method);
+    setIsBalanceOpen(false);
   }
 
-  // =========================
-  // ADD PAYMENT METHOD
-  // =========================
+  // 💳 MÉTODOS
   function handleAddMethod(data) {
     const newMethod = {
       type: data.type?.toUpperCase(),
       value:
         data.pixKey ||
         data.cardNumber ||
-        `${data.bank || ""} ${data.account || ""}`,
+        `${data.bank || ""} ${data.account || ""}`.trim(),
     };
 
     setMethods((prev) => [newMethod, ...prev]);
+    setIsMethodOpen(false);
   }
 
   return (
@@ -78,18 +64,23 @@ export function Wallet() {
       description="Gerencie seu saldo e acompanhe suas movimentações"
     >
       <div className="flex flex-col gap-6">
+
+        {/* SALDO */}
         <WalletBalanceCard
           balance={balance}
           onAddBalance={() => setIsBalanceOpen(true)}
         />
 
+        {/* STATS */}
         <WalletStats stats={stats} />
 
+        {/* MÉTODOS */}
         <PaymentMethodsCard
           methods={methods}
           onAddMethod={() => setIsMethodOpen(true)}
         />
 
+        {/* HISTÓRICO */}
         <TransactionHistory transactions={transactions} />
 
         {/* MODAIS */}
@@ -104,6 +95,7 @@ export function Wallet() {
           onClose={() => setIsMethodOpen(false)}
           onSubmit={handleAddMethod}
         />
+
       </div>
     </DonorLayout>
   );
