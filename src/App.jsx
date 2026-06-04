@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Login } from "./pages/Login";
 
-// imports do Admin
+// Admin
 
 import { Dashboard } from "./pages/admin/Dashboard";
 import { Organizations } from "./pages/admin/Organizations";
@@ -11,13 +11,22 @@ import { Contributors } from "./pages/admin/Contributors";
 import { Settings } from "./pages/admin/Settings";
 import { CampaignDetails } from "./pages/admin/CampaignDetais";
 
-// imports da Organização
+// Organization
 
 import { Dashboard as OrganizationDashboard } from "./pages/organization/Dashboard";
 import { Campaigns as OrganizationCampaigns } from "./pages/organization/Campaigns";
 import { CampaignDetails as OrganizationCampaignDetails } from "./pages/organization/CampaignDetails";
 import { Contributors as OrganizationContributors } from "./pages/organization/Contributors";
 import { Settings as OrganizationSettings } from "./pages/organization/Settings";
+
+// Donor
+
+import { Feed as DonorFeed } from "./pages/donor/Feed";
+import { Campaigns as DonorCampaigns } from "./pages/donor/Campaigns";
+import { CampaignDetails as DonorCampaignDetails } from "./pages/donor/CampaignDetails";
+import { OrganizationDetails as DonorOrganizationDetails } from "./pages/donor/OrganizationDetails";
+import { Organizations as DonorOrganizations } from "./pages/donor/Organizations";
+import { Wallet as DonorWallet } from "./pages/donor/Wallet";
 
 export default function App() {
   return (
@@ -27,6 +36,7 @@ export default function App() {
         <Route path="/" element={<Login />} />
 
         {/* ADMIN */}
+
         <Route path="/admin/dashboard" element={<Dashboard />} />
 
         <Route path="/admin/organizations" element={<Organizations />} />
@@ -46,6 +56,7 @@ export default function App() {
         />
 
         {/* ORGANIZATION */}
+
         <Route
           path="/organization/dashboard"
           element={<OrganizationDashboard />}
@@ -66,12 +77,30 @@ export default function App() {
           element={<OrganizationContributors />}
         />
 
-        <Route 
+        <Route
           path="/organization/settings"
           element={<OrganizationSettings />}
-        
         />
 
+        {/* DONOR */}
+
+        <Route path="/donor/feed" element={<DonorFeed />} />
+
+        <Route path="/donor/campaigns" element={<DonorCampaigns />} />
+
+        <Route path="/donor/organizations" element={<DonorOrganizations />} />
+
+        <Route
+          path="/donor/campaigns/:campaignId"
+          element={<DonorCampaignDetails />}
+        />
+
+        <Route
+          path="/donor/organizations/:organizationId"
+          element={<DonorOrganizationDetails />}
+        />
+
+        <Route path="/donor/wallet" element={<DonorWallet />} />
       </Routes>
     </BrowserRouter>
   );

@@ -8,12 +8,20 @@ import { ReceiptPreviewModal } from "../../components/common/modals/ReceiptPrevi
 export function CampaignDetailsBase({
   campaign,
   mode = "admin",
+
   onEdit,
   onClose,
+
   onAddEvidence,
   onDonate,
+
+  onViewOrganization,
+  onAssociate,
+
+  isAssociated = false,
 }) {
   const progress = (campaign.raised / campaign.goal) * 100;
+
   const [isEvidenceOpen, setIsEvidenceOpen] = useState(false);
   const [timeline, setTimeline] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -38,6 +46,8 @@ export function CampaignDetailsBase({
     setIsPreviewOpen(true);
   }
 
+  const canManageCampaign = mode === "admin" || mode === "organization";
+
   return (
     <div className="w-full flex flex-col gap-6">
       {/* HEADER */}
@@ -54,7 +64,7 @@ export function CampaignDetailsBase({
           </div>
 
           <div className="flex items-center gap-3">
-            {mode === "admin" && (
+            {canManageCampaign && (
               <>
                 <Button variant="outline" icon={Pencil} onClick={onEdit}>
                   Editar Campanha
@@ -66,15 +76,17 @@ export function CampaignDetailsBase({
               </>
             )}
 
-            {mode === "organization" && (
+            {mode === "donor" && (
               <>
-                <Button variant="outline" icon={Pencil} onClick={onEdit}>
-                  Editar Campanha
+                <Button variant="outline" onClick={onViewOrganization}>
+                  Ver Organização
                 </Button>
 
-                <Button variant="danger" icon={X} onClick={onClose}>
-                  Encerrar Campanha
-                </Button>
+                {isAssociated ? (
+                  <Button onClick={onDonate}>Apoiar Campanha</Button>
+                ) : (
+                  <Button onClick={onAssociate}>Associar-se</Button>
+                )}
               </>
             )}
           </div>
@@ -100,6 +112,7 @@ export function CampaignDetailsBase({
           <div className="mt-4 w-full">
             <div className="flex justify-between text-xs mb-1 text-slate-500">
               <span>Progresso</span>
+
               <span className="font-bold text-slate-700">
                 {progress.toFixed(0)}%
               </span>
@@ -114,7 +127,7 @@ export function CampaignDetailsBase({
           </div>
 
           <div className="flex justify-between mt-4 text-xs">
-            <div className="bg-slate-100 p-4 rounded">
+            <div className="bg-slate-100 p-2 rounded">
               Meta <br />
               <b>{Math.round(progress)}%</b>
             </div>
@@ -131,8 +144,8 @@ export function CampaignDetailsBase({
           </div>
         </div>
 
-        {/* APOIO */}
-        {mode === "organization" && (
+        {/* APOIAR */}
+        {(mode === "organization" || (mode === "donor" && isAssociated)) && (
           <div className="w-[380px] bg-white rounded-[10px] border border-zinc-400 p-4">
             <p className="text-zinc-400 font-extrabold text-sm">
               APOIAR A CAMPANHA
@@ -171,6 +184,31 @@ export function CampaignDetailsBase({
         <p className="text-sm text-stone-900 mt-2">{campaign.description}</p>
       </div>
 
+      {/* ORGANIZAÇÃO */}
+      {mode === "donor" && (
+        <div className="bg-white rounded-[10px] border border-zinc-400 p-4">
+          <p className="text-zinc-400 font-extrabold text-sm">
+            ORGANIZAÇÃO RESPONSÁVEL
+          </p>
+
+          <div className="mt-3 flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-800">
+                {campaign.organization}
+              </h3>
+
+              <p className="text-sm text-zinc-500">
+                Organização responsável pela campanha
+              </p>
+            </div>
+
+            <Button variant="outline" onClick={onViewOrganization}>
+              Ver Organização
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* TIMELINE */}
       <div className="bg-white rounded-[10px] border border-zinc-400 shadow p-6">
         <div className="flex justify-between items-start">
@@ -184,7 +222,7 @@ export function CampaignDetailsBase({
             </p>
           </div>
 
-          {mode === "organization" && (
+          {canManageCampaign && (
             <Button variant="primary" icon={Plus} onClick={handleAddEvidence}>
               Nova Evidência
             </Button>
@@ -193,7 +231,11 @@ export function CampaignDetailsBase({
 
         <div className="mt-6 flex flex-col gap-6">
           {timeline.map((item) => (
-            <TimelineItem key={item.id} {...item} onOpenFile={handleOpenReceipt}/>
+            <TimelineItem
+              key={item.id}
+              {...item}
+              onOpenFile={handleOpenReceipt}
+            />
           ))}
         </div>
       </div>

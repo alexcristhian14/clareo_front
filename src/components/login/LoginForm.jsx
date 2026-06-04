@@ -11,7 +11,7 @@ export function LoginForm() {
   function handleLogin(e) {
     e.preventDefault();
 
-    navigate("organization/dashboard");
+    navigate("donor/feed");
   }
 
   //  function handleLogin(e) {

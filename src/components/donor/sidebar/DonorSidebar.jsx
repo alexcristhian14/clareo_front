@@ -4,14 +4,15 @@ import { NavLink } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
 
 import {
-  LayoutDashboard,
+  Home,
   Building2,
-  Users,
+  Megaphone,
+  Wallet,
   Settings,
   LogOut,
 } from "lucide-react";
 
-export function AdminSidebar() {
+export function DonorSidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -46,7 +47,7 @@ export function AdminSidebar() {
             className={`
               h-10 rounded-[30px] border border-white
               flex items-center justify-center
-              transition-all duration-300 overflow-hidden font-montserrat
+              transition-all duration-300 overflow-hidden
 
               ${isOpen ? "w-40" : "w-24"}
             `}
@@ -56,7 +57,7 @@ export function AdminSidebar() {
                 text-white font-bold whitespace-nowrap
                 transition-all duration-300
 
-                ${isOpen ? "text-lg opacity-100" : "text-sm opacity-100"}
+                ${isOpen ? "text-lg" : "text-sm"}
               `}
             >
               CLAREO
@@ -67,28 +68,35 @@ export function AdminSidebar() {
         {/* MENU */}
         <div className="w-full flex flex-col gap-4">
           <SidebarItem
-            to="/admin/dashboard"
-            icon={<LayoutDashboard size={24} />}
-            label="Dashboard"
+            to="/donor/feed"
+            icon={<Home size={24} />}
+            label="Feed"
             isOpen={isOpen}
           />
 
           <SidebarItem
-            to="/admin/organizations"
+            to="/donor/organizations"
             icon={<Building2 size={24} />}
-            label="Organizations"
+            label="Organizações"
             isOpen={isOpen}
           />
 
           <SidebarItem
-            to="/admin/contributors"
-            icon={<Users size={24} />}
-            label="Contributors"
+            to="/donor/campaigns"
+            icon={<Megaphone size={24} />}
+            label="Campanhas"
             isOpen={isOpen}
           />
 
           <SidebarItem
-            to="/admin/settings"
+            to="/donor/wallet"
+            icon={<Wallet size={24} />}
+            label="Carteira"
+            isOpen={isOpen}
+          />
+
+          <SidebarItem
+            to="/donor/settings"
             icon={<Settings size={24} />}
             label="Configurações"
             isOpen={isOpen}
@@ -126,13 +134,7 @@ export function AdminSidebar() {
 
 function SidebarItem({ to, icon, label, isOpen }) {
   return (
-    <NavLink
-      to={to}
-      className={`
-        flex justify-center
-        ${isOpen ? "w-full" : "w-full"}
-      `}
-    >
+    <NavLink to={to} className="flex justify-center w-full">
       {({ isActive }) => (
         <div
           className={`
@@ -149,21 +151,19 @@ function SidebarItem({ to, icon, label, isOpen }) {
 
             ${
               isActive
-                ? "bg-[#FFFFFF] text-[#334155]"
+                ? "bg-white text-slate-700"
                 : "text-zinc-300 hover:bg-slate-600 hover:text-white"
             }
           `}
         >
-          <div className="flex items-center justify-center shrink-0">
-            {icon}
-          </div>
+          <div className="shrink-0">{icon}</div>
 
           <span
             className={`
               whitespace-nowrap font-semibold
               transition-all duration-300
 
-              ${isOpen ? "opacity-100 w-auto" : "opacity-0 w-0 overflow-hidden"}
+              ${isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden"}
             `}
           >
             {label}
