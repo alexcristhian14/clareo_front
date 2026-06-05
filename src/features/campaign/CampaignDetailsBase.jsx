@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { TimelineItem } from "../../components/admin/organization-details/TimelineItem";
 import { Button } from "../../components/common/Button";
 import { X, Pencil, Plus } from "lucide-react";
@@ -20,7 +20,15 @@ export function CampaignDetailsBase({
 
   isAssociated = false,
 }) {
-  const progress = (campaign.raised / campaign.goal) * 100;
+  // =========================
+  // 🔥 NORMALIZAÇÃO SEGURA (resolve bug de render)
+  // =========================
+  const raised = Number(campaign?.raised || 0);
+  const goal = Number(campaign?.goal || 1);
+
+  const progress = useMemo(() => {
+    return (raised / goal) * 100;
+  }, [raised, goal]);
 
   const [isEvidenceOpen, setIsEvidenceOpen] = useState(false);
   const [timeline, setTimeline] = useState([]);
@@ -47,6 +55,8 @@ export function CampaignDetailsBase({
   }
 
   const canManageCampaign = mode === "admin" || mode === "organization";
+
+  if (!campaign) return null;
 
   return (
     <div className="w-full flex flex-col gap-6">
@@ -101,11 +111,11 @@ export function CampaignDetailsBase({
 
           <div className="mt-4 flex justify-between items-end text-slate-700">
             <div className="text-xl font-bold">
-              R$ {campaign.raised.toLocaleString("pt-BR")}
+              R$ {raised.toLocaleString("pt-BR")}
             </div>
 
             <div className="text-sm">
-              de R$ {campaign.goal.toLocaleString("pt-BR")}
+              de R$ {goal.toLocaleString("pt-BR")}
             </div>
           </div>
 
@@ -134,12 +144,12 @@ export function CampaignDetailsBase({
 
             <div className="bg-slate-100 p-2 rounded">
               Doadores <br />
-              <b>{campaign.donors}</b>
+              <b>{campaign.donors || 0}</b>
             </div>
 
             <div className="bg-slate-100 p-2 rounded">
               Restam <br />
-              <b>{campaign.daysLeft} dias</b>
+              <b>{campaign.daysLeft || 0} dias</b>
             </div>
           </div>
         </div>
@@ -179,9 +189,13 @@ export function CampaignDetailsBase({
 
       {/* SOBRE */}
       <div className="bg-white rounded-[10px] border border-zinc-400 p-4">
-        <p className="text-zinc-400 font-extrabold text-sm">SOBRE A CAMPANHA</p>
+        <p className="text-zinc-400 font-extrabold text-sm">
+          SOBRE A CAMPANHA
+        </p>
 
-        <p className="text-sm text-stone-900 mt-2">{campaign.description}</p>
+        <p className="text-sm text-stone-900 mt-2">
+          {campaign.description}
+        </p>
       </div>
 
       {/* ORGANIZAÇÃO */}

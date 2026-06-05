@@ -7,34 +7,60 @@ import {
   useMemo,
 } from "react";
 
-
-
 const CampaignContext = createContext({});
 
 export function CampaignProvider({ children }) {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // =========================
-  // MOCK LOAD (substitui por API depois)
-  // =========================
   async function loadCampaigns() {
     setLoading(true);
 
     const data = [
       {
         id: 1,
-        title: "Saúde para Todos",
+        organizationId: 1,
+        title: "Acompanhamento Médico Itinerante",
         organization: "Instituto Saúde Viva",
         raised: 25000,
         goal: 50000,
+        description: "Equipe médica volante para atender comunidades rurais.",
       },
       {
         id: 2,
-        title: "Educação Digital",
-        organization: "Tech For All",
+        organizationId: 1,
+        title: "Mutirão de Vacinação",
+        organization: "Instituto Saúde Viva",
+        raised: 18000,
+        goal: 25000,
+        description: "Campanha para ampliar a cobertura vacinal.",
+      },
+      {
+        id: 3,
+        organizationId: 1,
+        title: "Medicamentos para Comunidades",
+        organization: "Instituto Saúde Viva",
         raised: 12000,
         goal: 30000,
+        description: "Distribuição de medicamentos essenciais.",
+      },
+      {
+        id: 4,
+        organizationId: 2,
+        title: "Educação no Campo",
+        organization: "Projeto Futuro",
+        raised: 38000,
+        goal: 45000,
+        description: "Levar educação de qualidade para áreas rurais.",
+      },
+      {
+        id: 5,
+        organizationId: 3,
+        title: "Alimentação Solidária",
+        organization: "Rede Esperança",
+        raised: 28000,
+        goal: 30000,
+        description: "Distribuição de alimentos para famílias vulneráveis.",
       },
     ];
 
@@ -47,44 +73,80 @@ export function CampaignProvider({ children }) {
   }, []);
 
   // =========================
-  // UPDATE DONATION (IMUTÁVEL + SEGURO)
+  // BASE QUERIES
   // =========================
-  const updateCampaignAfterDonation = useCallback((campaignId, amount) => {
-    const value = Number(amount || 0);
 
-    if (!campaignId || value <= 0) return;
+  const getCampaignById = useCallback(
+    (id) => campaigns.find((c) => String(c.id) === String(id)),
+    [campaigns]
+  );
+
+  const getCampaignsByOrganization = useCallback(
+    (organizationId) =>
+      campaigns.filter(
+        (c) => Number(c.organizationId) === Number(organizationId)
+      ),
+    [campaigns]
+  );
+
+  // =========================
+  // FEED QUERIES
+  // =========================
+
+  const getFeaturedCampaign = useCallback(() => {
+    return campaigns?.[0] || null;
+  }, [campaigns]);
+
+  const getTrendingCampaigns = useCallback(
+    (limit = 4) => {
+      return [...campaigns]
+        .sort((a, b) => (b.raised || 0) - (a.raised || 0))
+        .slice(0, limit);
+    },
+    [campaigns]
+  );
+
+  const getEndingCampaigns = useCallback(
+    (limit = 4) => {
+      return [...campaigns]
+        .sort(
+          (a, b) =>
+            (b.raised / b.goal) - (a.raised / a.goal)
+        )
+        .slice(0, limit);
+    },
+    [campaigns]
+  );
+
+  // =========================
+  // 🔥 UPDATE CORRETO (ÚNICO E DEFINITIVO)
+  // =========================
+
+  const updateCampaignAfterDonation = useCallback((campaignId, amount) => {
+    const value = Number(amount);
+
+    if (!campaignId || isNaN(value)) return;
 
     setCampaigns((prev) =>
-      prev.map((campaign) => {
-        const sameCampaign =
-          String(campaign.id) === String(campaignId);
-
-        if (!sameCampaign) return campaign;
-
-        const currentRaised = Number(campaign.raised || 0);
+      prev.map((c) => {
+        if (String(c.id) !== String(campaignId)) return c;
 
         return {
-          ...campaign,
-          raised: currentRaised + value,
+          ...c,
+          raised: Number(c.raised || 0) + value,
         };
       })
     );
   }, []);
 
   // =========================
-  // DERIVADOS OTIMIZADOS
+  // STATS
   // =========================
-  const featuredCampaign = useMemo(
-    () => campaigns?.[0] || null,
-    [campaigns]
-  );
 
   const stats = useMemo(() => {
-    const safe = Array.isArray(campaigns) ? campaigns : [];
-
     return {
-      totalCampaigns: safe.length,
-      totalRaised: safe.reduce(
+      totalCampaigns: campaigns.length,
+      totalRaised: campaigns.reduce(
         (acc, c) => acc + Number(c.raised || 0),
         0
       ),
@@ -96,10 +158,19 @@ export function CampaignProvider({ children }) {
       value={{
         campaigns,
         loading,
-        featuredCampaign,
-        stats,
-        setCampaigns,
+
+        getCampaignById,
+        getCampaignsByOrganization,
+
+        getFeaturedCampaign,
+        getTrendingCampaigns,
+        getEndingCampaigns,
+
         updateCampaignAfterDonation,
+
+        stats,
+
+        setCampaigns,
         reload: loadCampaigns,
       }}
     >

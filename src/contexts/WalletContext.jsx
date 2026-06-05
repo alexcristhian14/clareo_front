@@ -1,19 +1,16 @@
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
-
 import {
   getBalance,
   getTransactions,
   addBalance as addBalanceService,
   donate as donateService,
 } from "../services/walletService";
-
 import { useAuth } from "./AuthContext";
 
 const WalletContext = createContext({});
 
 export function WalletProvider({ children }) {
   const { user } = useAuth();
-
   const userId = user?.id;
 
   const [balance, setBalance] = useState(0);
@@ -28,22 +25,18 @@ export function WalletProvider({ children }) {
       return;
     }
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
+    try {
       const [bal, tx] = await Promise.all([
         getBalance(userId),
         getTransactions(userId),
       ]);
 
-      console.log("BALANCE RETORNADO", bal);
-      console.log("TRANSACTIONS RETORNADAS", tx);
-
       setBalance(Number(bal || 0));
       setTransactions(Array.isArray(tx) ? [...tx] : []);
     } catch (error) {
-      console.error("Erro ao carregar carteira:", error);
-
+      console.error("Erro ao carregar wallet:", error);
       setBalance(0);
       setTransactions([]);
     } finally {
@@ -56,15 +49,7 @@ export function WalletProvider({ children }) {
   }, [userId]);
 
   async function addBalance(amount, method) {
-    console.log("CONTEXT addBalance", {
-      userId,
-      amount,
-      method,
-    });
-
-    if (!userId) {
-      throw new Error("Usuário não autenticado");
-    }
+    if (!userId) throw new Error("Usuário não autenticado");
 
     await addBalanceService({
       userId,
@@ -72,17 +57,12 @@ export function WalletProvider({ children }) {
       method,
     });
 
-    console.log("SERVICE EXECUTOU");
-
+    await new Promise((r) => setTimeout(r, 50));
     await loadWallet();
-
-    console.log("LOAD WALLET EXECUTOU");
   }
 
   async function donate(campaignId, amount) {
-    if (!userId) {
-      throw new Error("Usuário não autenticado");
-    }
+    if (!userId) throw new Error("Usuário não autenticado");
 
     await donateService({
       userId,
@@ -90,6 +70,7 @@ export function WalletProvider({ children }) {
       amount: Number(amount),
     });
 
+    await new Promise((r) => setTimeout(r, 50));
     await loadWallet();
   }
 
@@ -105,15 +86,9 @@ export function WalletProvider({ children }) {
       .reduce((acc, t) => acc + Number(t.amount || 0), 0);
 
     const campaigns = new Set(
-      safe.filter((t) => t.type === "donation").map((t) => t.campaignId),
+      safe.filter((t) => t.type === "donation").map((t) => t.campaignId)
     ).size;
 
-    console.log("TRANSACTIONS", transactions);
-    console.log("STATS", {
-      donated,
-      recharges,
-      campaigns,
-    });
     return {
       donated,
       recharges,
@@ -129,10 +104,8 @@ export function WalletProvider({ children }) {
         transactions,
         stats,
         loading,
-
         addBalance,
         donate,
-
         reload: loadWallet,
       }}
     >

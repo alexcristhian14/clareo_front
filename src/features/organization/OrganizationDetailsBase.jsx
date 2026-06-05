@@ -5,6 +5,7 @@ export function OrganizationDetailsBase({
   campaigns = [],
   isAssociated = false,
   onAssociate,
+  onUnassociate,
   onOpenCampaign,
 }) {
   return (
@@ -20,8 +21,17 @@ export function OrganizationDetailsBase({
         </div>
 
         {isAssociated ? (
-          <div className="px-4 py-2 bg-green-100 text-green-700 rounded font-semibold">
-            Associado ✓
+          <div className="flex items-center gap-3">
+            <div className="px-4 py-2 bg-green-100 text-green-700 rounded font-semibold">
+              Associado ✓
+            </div>
+
+            <Button
+              onClick={onUnassociate}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              Cancelar associação
+            </Button>
           </div>
         ) : (
           <Button onClick={onAssociate}>Associar-se</Button>
@@ -41,7 +51,9 @@ export function OrganizationDetailsBase({
         <div className="bg-white rounded-[10px] border border-zinc-300 p-5">
           <p className="text-xs text-zinc-500 uppercase">Apoiadores</p>
 
-          <p className="text-2xl font-bold mt-2">{organization.supporters}</p>
+          <p className="text-2xl font-bold mt-2">
+            {organization.supporters}
+          </p>
         </div>
 
         <div className="bg-white rounded-[10px] border border-zinc-300 p-5">
@@ -55,7 +67,9 @@ export function OrganizationDetailsBase({
         <div className="bg-white rounded-[10px] border border-zinc-300 p-5">
           <p className="text-xs text-zinc-500 uppercase">Atuação</p>
 
-          <p className="text-2xl font-bold mt-2">{organization.years} anos</p>
+          <p className="text-2xl font-bold mt-2">
+            {organization.years} anos
+          </p>
         </div>
       </div>
 
@@ -85,7 +99,9 @@ export function OrganizationDetailsBase({
                 key={campaign.id}
                 className="border border-zinc-200 rounded-[10px] p-4"
               >
-                <h3 className="font-bold text-slate-800">{campaign.title}</h3>
+                <h3 className="font-bold text-slate-800">
+                  {campaign.title}
+                </h3>
 
                 <p className="text-xs text-zinc-500 mt-2">
                   R$ {campaign.raised.toLocaleString("pt-BR")} de R${" "}
@@ -101,12 +117,14 @@ export function OrganizationDetailsBase({
                   />
                 </div>
 
-                <Button
-                  className="w-full mt-4"
-                  onClick={() => onOpenCampaign(campaign.id)}
-                >
-                  Ver campanha
-                </Button>
+                {onOpenCampaign && (
+                  <Button
+                    className="mt-4 w-full"
+                    onClick={() => onOpenCampaign(campaign.id)}
+                  >
+                    Ver campanha
+                  </Button>
+                )}
               </div>
             );
           })}

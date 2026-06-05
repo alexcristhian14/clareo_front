@@ -1,49 +1,53 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 import DonorLayout from "../../layouts/DonorLayout";
 import { OrganizationDetailsBase } from "../../features/organization/OrganizationDetailsBase";
+
+import { useAssociations } from "../../contexts/AssociationContext";
+import { useOrganizations } from "../../contexts/OrganizationContext";
+import { useCampaigns } from "../../contexts/CampaignContext";
 
 export function OrganizationDetails() {
   const { organizationId } = useParams();
   const navigate = useNavigate();
 
-  const organization = {
-    id: organizationId,
-    name: "Instituto Saúde Viva",
-    description:
-      "Organização focada em saúde comunitária e atendimento de populações em situação de vulnerabilidade.",
+  const { associate, unassociate, isAssociated } = useAssociations();
 
-    campaignsCount: 15,
-    supporters: 2134,
-    raised: 850000,
-    years: 8,
-  };
+  const { getOrganizationById } = useOrganizations();
 
-  const campaigns = [
-    {
-      id: 1,
-      title: "Acompanhamento Médico Itinerante",
-      raised: 25000,
-      goal: 50000,
-    },
-    {
-      id: 2,
-      title: "Mutirão de Vacinação",
-      raised: 18000,
-      goal: 25000,
-    },
-    {
-      id: 3,
-      title: "Medicamentos para Comunidades",
-      raised: 12000,
-      goal: 30000,
-    },
-  ];
+  const organization = getOrganizationById(Number(organizationId));
 
-  const isAssociated = false;
+  if (!organization) {
+    return (
+      <DonorLayout title="Organização" description="Detalhes da organização">
+        <p>Organização não encontrada.</p>
+      </DonorLayout>
+    );
+  }
 
-  function handleAssociate() {
-    console.log("Associar organização", organizationId);
+  const { getCampaignsByOrganization } = useCampaigns();
+
+  const campaigns = getCampaignsByOrganization(Number(organizationId));
+
+  const associated = isAssociated(organization.id);
+
+  async function handleUnassociate() {
+    try {
+      await unassociate(organization.id);
+      toast.success("Associação cancelada");
+    } catch {
+      toast.error("Erro ao cancelar associação");
+    }
+  }
+
+  async function handleAssociate() {
+    try {
+      await associate(organization.id);
+      toast.success("Agora você é associado desta organização");
+    } catch {
+      toast.error("Erro ao realizar associação");
+    }
   }
 
   function handleOpenCampaign(campaignId) {
@@ -58,8 +62,9 @@ export function OrganizationDetails() {
       <OrganizationDetailsBase
         organization={organization}
         campaigns={campaigns}
-        isAssociated={isAssociated}
+        isAssociated={associated}
         onAssociate={handleAssociate}
+        onUnassociate={handleUnassociate}
         onOpenCampaign={handleOpenCampaign}
       />
     </DonorLayout>

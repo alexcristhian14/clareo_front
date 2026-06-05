@@ -25,28 +25,32 @@ export function DonationModal({ isOpen, onClose, campaign }) {
     setStep((s) => s - 1);
   }
 
-async function handleConfirm() {
-  try {
-    console.log("🔥 tentando doar:", {
-      id: campaign.id,
-      amount,
-      title: campaign.title,
-    });
+  async function handleConfirm() {
+    try {
+      setLoading(true);
 
-    await donate(campaign.id, amount, campaign.title);
+      const value = Number(amount);
 
-    console.log("✅ doação passou");
+      if (!value || value <= 0) {
+        toast.error("Valor inválido");
+        return;
+      }
 
-    updateCampaignAfterDonation(campaign.id, amount);
+      await donate(campaign.id, value, method);
 
-    toast.success("Doação realizada com sucesso 🎉");
+      // 🔥 ATUALIZA CAMPANHA
+      updateCampaignAfterDonation(campaign.id, value);
 
-    onClose();
-  } catch (err) {
-    console.error("❌ ERRO REAL:", err);
-    toast.error(err.message || "Erro ao realizar doação");
+      toast.success("Doação realizada com sucesso 🎉");
+
+      onClose();
+    } catch (err) {
+      console.error("❌ ERRO REAL:", err);
+      toast.error(err.message || "Erro ao realizar doação");
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -55,7 +59,6 @@ async function handleConfirm() {
           <X size={18} />
         </button>
 
-        {/* STEP 1 */}
         {step === 1 && (
           <div>
             <h2 className="font-bold text-lg">Escolha o valor</h2>
@@ -89,7 +92,6 @@ async function handleConfirm() {
           </div>
         )}
 
-        {/* STEP 2 */}
         {step === 2 && (
           <div>
             <h2 className="font-bold text-lg">Método</h2>
@@ -118,7 +120,6 @@ async function handleConfirm() {
           </div>
         )}
 
-        {/* STEP 3 */}
         {step === 3 && (
           <div>
             <h2 className="font-bold text-lg">Confirmar</h2>

@@ -6,14 +6,16 @@ import { CampaignDetailsBase } from "../../features/campaign/CampaignDetailsBase
 import { DonationModal } from "../../components/donor/modals/DonationModal";
 
 import { useCampaigns } from "../../contexts/CampaignContext";
+import { useWallet } from "../../contexts/WalletContext";
 
 export function CampaignDetails() {
   const { campaignId } = useParams();
-  const { campaigns, updateCampaignAfterDonation } = useCampaigns();
+
+  const { campaigns } = useCampaigns();
+  const { donate } = useWallet();
 
   const [isDonateOpen, setIsDonateOpen] = useState(false);
 
-  // 🔥 pega campanha REAL do context
   const campaign = campaigns.find(
     (c) => String(c.id) === String(campaignId)
   );
@@ -27,8 +29,7 @@ export function CampaignDetails() {
   }
 
   async function handleDonate({ amount }) {
-    // ⚠️ aqui você conecta com wallet depois
-    updateCampaignAfterDonation(campaign.id, amount);
+    await donate(campaign.id, amount);
 
     setIsDonateOpen(false);
   }
@@ -39,7 +40,6 @@ export function CampaignDetails() {
       description="Conheça e apoie esta causa"
     >
       <div className="relative">
-
         <CampaignDetailsBase
           mode="donor"
           campaign={campaign}
@@ -54,7 +54,6 @@ export function CampaignDetails() {
           campaign={campaign}
           onConfirm={handleDonate}
         />
-
       </div>
     </DonorLayout>
   );

@@ -5,71 +5,71 @@ import { CampaignSection } from "../../components/donor/feed/CampaignSection";
 import { RecentUpdates } from "../../components/donor/feed/RecentUpdates";
 import { DonorStats } from "../../components/donor/feed/DonorStats";
 
+import { useCampaigns } from "../../contexts/CampaignContext";
+import { useWallet } from "../../contexts/WalletContext";
+
 export function Feed() {
-  const featuredCampaign = {
-    id: 1,
-    title: "Acompanhamento Médico Itinerante",
-    organization: "Instituto Saúde Viva",
-    raised: 25000,
-    goal: 50000,
-    description:
-      "Equipe médica volante para atender comunidades rurais.",
+  const {
+    campaigns = [],
+    getTrendingCampaigns,
+    getEndingCampaigns,
+    getFeaturedCampaign,
+    stats: campaignStats,
+  } = useCampaigns();
+
+  const { transactions = [] } = useWallet();
+
+  const featuredCampaign = getFeaturedCampaign?.() || null;
+  const trendingCampaigns = getTrendingCampaigns?.() || [];
+  const endingCampaigns = getEndingCampaigns?.() || [];
+
+  // =========================
+  // 🔥 STATS REAIS
+  // =========================
+
+  // 💰 total doado (REAL)
+  const totalDonated = transactions
+    .filter((t) => t.type === "donation")
+    .reduce((acc, t) => acc + Number(t.amount || 0), 0);
+
+  // 🎯 campanhas apoiadas (únicas)
+  const supportedCampaigns = new Set(
+    transactions
+      .filter((t) => t.type === "donation" && t.campaignId)
+      .map((t) => t.campaignId)
+  ).size;
+
+  // 👀 evidências vistas (placeholder inteligente)
+  const evidencesViewed = new Set(
+    transactions
+      .filter((t) => t.type === "donation" && t.campaignId)
+      .map((t) => t.campaignId)
+  ).size * 2;
+
+  const donorStats = {
+    totalDonated,
+    supportedCampaigns,
+    evidencesViewed,
   };
 
-  const featuredCampaigns = [
-    {
-      id: 1,
-      title: "Saúde para Todos",
-      organization: "Instituto Saúde Viva",
-      raised: 25000,
-      goal: 50000,
-    },
-    {
-      id: 2,
-      title: "Educação no Campo",
-      organization: "Projeto Futuro",
-      raised: 38000,
-      goal: 45000,
-    },
-  ];
-
-  const endingCampaigns = [
-    {
-      id: 3,
-      title: "Alimentação Solidária",
-      organization: "Rede Esperança",
-      raised: 28000,
-      goal: 30000,
-    },
-    {
-      id: 4,
-      title: "Projeto Água",
-      organization: "Instituto Esperança",
-      raised: 46000,
-      goal: 50000,
-    },
-  ];
-
-  const updates = [
-    {
-      id: 1,
-      campaign: "Acompanhamento Médico Itinerante",
-      description: "Compra de medicamentos realizada.",
-      date: "Hoje",
-    },
-    {
-      id: 2,
-      campaign: "Alimentação Solidária",
-      description: "Entrega de 200 cestas básicas.",
-      date: "Ontem",
-    },
-  ];
-
-  const stats = {
-    totalDonated: 1250,
-    supportedCampaigns: 8,
-    evidencesViewed: 23,
-  };
+  // =========================
+  // updates reais
+  // =========================
+  const updates = (transactions || [])
+    .slice(0, 5)
+    .map((t) => ({
+      id: t.id,
+      campaign: t.campaignId
+        ? `Campanha #${t.campaignId}`
+        : "Recarga de carteira",
+      description:
+        t.type === "donation"
+          ? `Doação de R$ ${t.amount}`
+          : `Recarga de R$ ${t.amount}`,
+      date: t.date
+        ? new Date(t.date).toLocaleDateString("pt-BR")
+        : "",
+    }));
 
   return (
     <DonorLayout
@@ -77,11 +77,13 @@ export function Feed() {
       description="Descubra campanhas e acompanhe seu impacto"
     >
       <div className="flex flex-col gap-8">
-        <HeroCampaign campaign={featuredCampaign} />
+        {featuredCampaign && (
+          <HeroCampaign campaign={featuredCampaign} />
+        )}
 
         <CampaignSection
           title="Campanhas em alta"
-          campaigns={featuredCampaigns}
+          campaigns={trendingCampaigns}
         />
 
         <CampaignSection
@@ -91,7 +93,7 @@ export function Feed() {
 
         <RecentUpdates updates={updates} />
 
-        <DonorStats stats={stats} />
+        <DonorStats stats={donorStats} />
       </div>
     </DonorLayout>
   );
