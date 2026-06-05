@@ -1,8 +1,10 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useState, useMemo } from "react";
 
 import OrganizationLayout from "../../layouts/OrganizationLayout";
 import { CampaignDetailsBase } from "../../features/campaign/CampaignDetailsBase";
+
+import { useOrganizations } from "../../contexts/OrganizationContext";
 
 import { DeleteCampaignModal } from "../../components/common/modals/DeleteCampaignModal";
 import { EditCampaignModal } from "../../components/common/modals/EditCampaignModal";
@@ -10,63 +12,62 @@ import { EditCampaignModal } from "../../components/common/modals/EditCampaignMo
 export function CampaignDetails() {
   const { campaignId } = useParams();
 
-  const [campaign, setCampaign] = useState({
-    id: campaignId,
-    title: "Acompanhamento Médico Itinerante",
-    organization: "Instituto Saúde Viva",
-    raised: 25000,
-    goal: 50000,
-    donors: 142,
-    daysLeft: 18,
-    description:
-      "Equipe médica volante para atender comunidades rurais sem acesso a postos de saúde.",
-  });
+  const {
+    getCampaignById,
+    getOrganizationById,
+    updateCampaign,
+    deleteCampaign,
+  } = useOrganizations();
 
-  // modais (mesmos do admin — reutiliza tudo)
+  const campaign = getCampaignById(campaignId);
+
+  const campaignWithOrg = useMemo(() => {
+    if (!campaign) return null;
+
+    const org = getOrganizationById(campaign.organizationId);
+
+    return {
+      ...campaign,
+      organization: org?.name ?? "Organização",
+    };
+  }, [campaign, getOrganizationById]);
+
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  // ORGANIZATION ACTIONS
-  function handleAddEvidence() {
-    console.log("Nova evidência para campanha:", campaignId);
+  if (!campaignWithOrg) {
+    return <div>Campanha não encontrada</div>;
   }
 
-  function handleDonate() {
-    console.log("Doação para campanha:", campaignId);
-  }
-
-  function handleSaveEdit(updatedCampaign) {
-    setCampaign(updatedCampaign);
+  function handleSaveEdit(updated) {
+    updateCampaign(campaign.id, updated);
+    setIsEditOpen(false);
   }
 
   function handleDelete() {
-    console.log("Cancelar campanha (org):", campaignId);
+    deleteCampaign(campaign.id);
     setIsDeleteOpen(false);
   }
 
   return (
     <OrganizationLayout
-      title={campaign.title}
+      title={campaignWithOrg.name}
       description="Acompanhe a campanha"
     >
       <CampaignDetailsBase
         mode="organization"
-        campaign={campaign}
-        onAddEvidence={handleAddEvidence}
-        onDonate={handleDonate}
+        campaign={campaignWithOrg} // 👈 AGORA TEM organization
         onEdit={() => setIsEditOpen(true)}
         onClose={() => setIsDeleteOpen(true)}
       />
 
-      {/* EDIT MODAL (reutilizado do admin) */}
       <EditCampaignModal
         isOpen={isEditOpen}
-        campaign={campaign}
+        campaign={campaignWithOrg}
         onClose={() => setIsEditOpen(false)}
         onSave={handleSaveEdit}
       />
 
-      {/* DELETE MODAL (reutilizado do admin) */}
       <DeleteCampaignModal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}

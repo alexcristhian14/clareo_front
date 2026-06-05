@@ -4,7 +4,7 @@ let userMock = {
   id: 1,
   name: "Alex",
   email: "alex@email.com",
-  role: "donor",
+  role: "organization", // ou "admin" // ou "donor"
 };
 
 export const authService = {

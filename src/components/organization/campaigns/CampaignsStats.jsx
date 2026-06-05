@@ -4,31 +4,41 @@ import {
   Wallet,
   TrendingUp,
 } from "lucide-react";
-
-const stats = [
-  {
-    title: "Campanhas Ativas",
-    value: "12",
-    icon: Megaphone,
-  },
-  {
-    title: "Meta Total",
-    value: "R$ 120.000",
-    icon: Target,
-  },
-  {
-    title: "Arrecadado",
-    value: "R$ 84.500",
-    icon: Wallet,
-  },
-  {
-    title: "Taxa de Sucesso",
-    value: "72%",
-    icon: TrendingUp,
-  },
-];  
+import { useOrganizations } from "../../../contexts/OrganizationContext";
 
 export function CampaignsStats() {
+  const { campaigns } = useOrganizations();
+
+  const totalGoal = campaigns.reduce((a, c) => a + c.goal, 0);
+  const totalRaised = campaigns.reduce((a, c) => a + c.raised, 0);
+  const active = campaigns.filter((c) => c.status === "Ativa");
+
+  const stats = [
+    {
+      title: "Campanhas Ativas",
+      value: active.length,
+      icon: Megaphone,
+    },
+    {
+      title: "Meta Total",
+      value: `R$ ${totalGoal.toLocaleString("pt-BR")}`,
+      icon: Target,
+    },
+    {
+      title: "Arrecadado",
+      value: `R$ ${totalRaised.toLocaleString("pt-BR")}`,
+      icon: Wallet,
+    },
+    {
+      title: "Taxa de Sucesso",
+      value:
+        totalGoal > 0
+          ? `${((totalRaised / totalGoal) * 100).toFixed(0)}%`
+          : "0%",
+      icon: TrendingUp,
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
       {stats.map((stat) => {
@@ -44,16 +54,12 @@ export function CampaignsStats() {
                 <p className="text-sm text-zinc-500">
                   {stat.title}
                 </p>
-
                 <h3 className="text-3xl font-bold mt-2">
                   {stat.value}
                 </h3>
               </div>
 
-              <Icon
-                size={28}
-                className="text-blue-600"
-              />
+              <Icon size={28} className="text-blue-600" />
             </div>
           </div>
         );

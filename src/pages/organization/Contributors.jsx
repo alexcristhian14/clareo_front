@@ -1,24 +1,13 @@
 import OrganizationLayout from "../../layouts/OrganizationLayout";
+import { useOrganizations } from "../../contexts/OrganizationContext";
 
 export function Contributors() {
-  const contributors = [
-    {
-      id: 1,
-      name: "Carlos Silva",
-      email: "carlos@email.com",
-      totalDonated: 350,
-      campaigns: 2,
-      lastDonation: "2026-05-20",
-    },
-    {
-      id: 2,
-      name: "Maria Souza",
-      email: "maria@email.com",
-      totalDonated: 1200,
-      campaigns: 5,
-      lastDonation: "2026-06-01",
-    },
-  ];
+  const { getContributorsByOrganization } = useOrganizations();
+
+  // por enquanto fixo (depois você pode usar auth/orgId real)
+  const organizationId = 1;
+
+  const contributors = getContributorsByOrganization(organizationId);
 
   return (
     <OrganizationLayout

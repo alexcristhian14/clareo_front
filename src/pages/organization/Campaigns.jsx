@@ -3,12 +3,19 @@ import { toast } from "sonner";
 
 import OrganizationLayout from "../../layouts/OrganizationLayout";
 
+import { useOrganizations } from "../../contexts/OrganizationContext";
+
 import { CreateCampaignModal } from "../../components/admin/organization-details/modals/CreateCampaignModal";
 import { CampaignsStats } from "../../components/organization/campaigns/CampaignsStats";
 import { CampaignsToolbar } from "../../components/organization/campaigns/CampaignsToolbar";
 import { CampaignsTable } from "../../components/organization/campaigns/CampaignsTable";
 
 export function Campaigns() {
+  const {
+    campaigns,
+    addCampaign,
+  } = useOrganizations();
+
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
   const [minGoal, setMinGoal] = useState("");
@@ -19,59 +26,26 @@ export function Campaigns() {
 
   function handleCreate(data) {
     try {
-      console.log("Criando campanha:", data);
+      addCampaign(data);
 
-      // simulação de API
-      const success = true;
-
-      if (success) {
-        const newCampaign = {
-          id: Date.now(),
-          ...data,
-          raised: 0,
-          status: "Ativa",
-        };
-
-        setCampaigns((prev) => [newCampaign, ...prev]);
-
-        toast.success("Campanha criada com sucesso!");
-      } else {
-        toast.error("Erro ao criar campanha");
-      }
-
+      toast.success("Campanha criada com sucesso!");
       setIsOpen(false);
-    } catch (error) {
-      toast.error("Erro inesperado");
+    } catch (err) {
+      toast.error("Erro ao criar campanha");
     }
   }
 
-  const [campaigns, setCampaigns] = useState([
-    {
-      id: 1,
-      name: "Água para Todos",
-      goal: 10000,
-      raised: 9200,
-      startDate: "01/05/2026",
-      endDate: "30/06/2026",
-      status: "Ativa",
-    },
-  ]);
-
   const filteredCampaigns = campaigns.filter((c) => {
-    const matchSearch = c.name.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = c.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
     const matchStatus = status ? c.status === status : true;
-
     const matchGoal = minGoal ? c.goal >= Number(minGoal) : true;
 
-    const matchStart = dateStart
-      ? new Date(c.startDate) >= new Date(dateStart)
-      : true;
-
-    const matchEnd = dateEnd ? new Date(c.endDate) <= new Date(dateEnd) : true;
-
-    return matchSearch && matchStatus && matchGoal && matchStart && matchEnd;
+    return matchSearch && matchStatus && matchGoal;
   });
+
   return (
     <OrganizationLayout
       title="Campanhas"

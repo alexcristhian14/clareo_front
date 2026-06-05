@@ -7,18 +7,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { month: "Jan", value: 2500 },
-  { month: "Fev", value: 4100 },
-  { month: "Mar", value: 3900 },
-  { month: "Abr", value: 5600 },
-  { month: "Mai", value: 7200 },
-  { month: "Jun", value: 8750 },
-];
-
-export function RevenueLineChart() {
+export function RevenueLineChart({ data }) {
   return (
-    <div className="bg-white rounded-[10px] border border-zinc-300 p-6 shadow-[0px_7px_30px_-4px_rgba(0,0,0,0.21)]">
+    <div className="bg-white p-6 border rounded-[10px]">
       <h2 className="font-bold text-lg mb-6">
         Evolução da Arrecadação
       </h2>
@@ -29,12 +20,7 @@ export function RevenueLineChart() {
             <XAxis dataKey="month" />
             <YAxis />
             <Tooltip />
-
-            <Line
-              dataKey="value"
-              stroke="#2563eb"
-              strokeWidth={3}
-            />
+            <Line dataKey="value" stroke="#2563eb" strokeWidth={3} />
           </LineChart>
         </ResponsiveContainer>
       </div>

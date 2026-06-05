@@ -65,11 +65,11 @@ export function CampaignDetailsBase({
         <div className="bg-white rounded-[10px] border border-zinc-400 p-6 flex justify-between items-start">
           <div className="flex flex-col">
             <h1 className="text-slate-700 text-3xl font-extrabold">
-              {campaign.title}
+              {campaign.name}
             </h1>
 
             <p className="text-slate-700 text-sm font-light">
-              por {campaign.organization}
+              por {campaign.organization || "Organização"}
             </p>
           </div>
 
