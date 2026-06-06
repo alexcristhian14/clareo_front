@@ -229,6 +229,10 @@ export function OrganizationProvider({ children }) {
     return contributors;
   }, [contributors]);
 
+  const getAllTransactions = useCallback(() => {
+    return transactions;
+  }, [transactions]);
+
   // =====================
   // ALERTS (DASHBOARD)
   // =====================
@@ -240,6 +244,51 @@ export function OrganizationProvider({ children }) {
       { type: "warning", text: "Campanha encerra em 3 dias." },
     ];
   }, []);
+
+  const getDashboardStats = useCallback(() => {
+    const totalRevenue = transactions.reduce((acc, t) => {
+      return acc + Number(t.amount || 0);
+    }, 0);
+
+    const totalTransactions = transactions.length;
+
+    const totalContributors = contributors.length;
+
+    const activeCampaigns = organizations.filter(
+      (o) => o.status === "Ativa",
+    ).length;
+
+    return {
+      totalRevenue,
+      totalTransactions,
+      totalContributors,
+      activeCampaigns,
+    };
+  }, [transactions, contributors, organizations]);
+
+  const getRevenueChartData = useCallback(() => {
+    const map = {};
+
+    transactions.forEach((t) => {
+      const month = t.date?.slice(3, 10); // simplificado
+      map[month] = (map[month] || 0) + Number(t.amount || 0);
+    });
+
+    return Object.entries(map).map(([month, revenue]) => ({
+      month,
+      revenue,
+    }));
+  }, [transactions]);
+
+  const getCampaignStatusData = useCallback(() => {
+    const active = organizations.filter((o) => o.status === "Ativa").length;
+    const inactive = organizations.filter((o) => o.status === "Inativa").length;
+
+    return [
+      { name: "Ativas", value: active },
+      { name: "Inativas", value: inactive },
+    ];
+  }, [organizations]);
 
   // =====================
   // VALORES DO CONTEXTO
@@ -267,6 +316,10 @@ export function OrganizationProvider({ children }) {
 
       getAllContributors,
 
+      getAllTransactions,
+      getDashboardStats,
+      getRevenueChartData,
+      getCampaignStatusData,
       getAlerts,
     }),
     [
@@ -283,6 +336,10 @@ export function OrganizationProvider({ children }) {
       getCampaignsByOrganization,
       getPaymentMethodsByOrganization,
       getAllContributors,
+      getAllTransactions,
+      getDashboardStats,
+      getRevenueChartData,
+      getCampaignStatusData,
       getAlerts,
     ],
   );
