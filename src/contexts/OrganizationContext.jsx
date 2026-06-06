@@ -35,6 +35,8 @@ const initialContributors = [
     totalDonated: 350,
     campaigns: 2,
     lastDonation: "2026-05-20",
+    role: "Admin",
+    date: "05/06/2026",
   },
 ];
 
@@ -81,12 +83,52 @@ const initialTransactions = [
   },
 ];
 
+const initialCampaigns = [
+  {
+    id: 1,
+    organizationId: 1,
+    name: "Atendimento Médico Itinerante",
+    description: "Equipe médica volante para atender comunidades rurais.",
+    status: "Ativa",
+    daysLeft: 18,
+    raised: 32000,
+    goal: 50000,
+  },
+  {
+    id: 2,
+    organizationId: 1,
+    name: "Campanha de Vacinação",
+    description: "Ação de vacinação em regiões vulneráveis.",
+    status: "Ativa",
+    daysLeft: 10,
+    raised: 18000,
+    goal: 30000,
+  },
+];
+
+const initialPaymentMethods = [
+  {
+    id: 1,
+    organizationId: 1,
+    type: "PIX",
+    key: "instituto@pix.com",
+  },
+  {
+    id: 2,
+    organizationId: 1,
+    type: "Conta Bancária",
+    key: "Banco do Brasil • Ag 1234 • CC 56789-0",
+  },
+];
+
 export function OrganizationProvider({ children }) {
   // 🟢 TODOS OS STATES CORRETAMENTE DENTRO DO COMPONENTE
   const [organizations, setOrganizations] = useState(initialOrganizations);
   const [contributors, setContributors] = useState(initialContributors);
   const [transactions, setTransactions] = useState(initialTransactions);
   const [currentOrgId] = useState(1); // Simula o ID da organização logada por padrão
+  const [campaigns, setCampaigns] = useState(initialCampaigns);
+  const [paymentMethods, setPaymentMethods] = useState(initialPaymentMethods);
 
   // =====================
   // ORGANIZATION
@@ -97,6 +139,36 @@ export function OrganizationProvider({ children }) {
       return organizations.find((o) => String(o.id) === String(id));
     },
     [organizations],
+  );
+
+  const getWalletByOrganization = useCallback(
+    (orgId) => {
+      const orgTransactions = transactions.filter(
+        (t) => String(t.organizationId) === String(orgId),
+      );
+
+      const total = orgTransactions.reduce((acc, t) => {
+        const value = Number(
+          String(t.value)
+            .replace("R$", "")
+            .replace(/\./g, "")
+            .replace(",", ".")
+            .trim(),
+        );
+
+        if (t.type === "Crédito") return acc + value;
+        if (t.type === "Débito") return acc - value;
+
+        return acc;
+      }, 0);
+
+      return {
+        total,
+        available: total,
+        blocked: 0,
+      };
+    },
+    [transactions],
   );
 
   const updateOrganization = useCallback((id, data) => {
@@ -135,6 +207,27 @@ export function OrganizationProvider({ children }) {
     },
     [transactions],
   );
+  const getCampaignsByOrganization = useCallback(
+    (orgId) => {
+      return campaigns.filter(
+        (c) => String(c.organizationId) === String(orgId),
+      );
+    },
+    [campaigns],
+  );
+
+  const getPaymentMethodsByOrganization = useCallback(
+    (orgId) => {
+      return paymentMethods.filter(
+        (p) => String(p.organizationId) === String(orgId),
+      );
+    },
+    [paymentMethods],
+  );
+
+  const getAllContributors = useCallback(() => {
+    return contributors;
+  }, [contributors]);
 
   // =====================
   // ALERTS (DASHBOARD)
@@ -158,6 +251,7 @@ export function OrganizationProvider({ children }) {
       transactions,
 
       currentOrgId,
+      paymentMethods,
 
       getOrganizationById,
       updateOrganization,
@@ -166,6 +260,12 @@ export function OrganizationProvider({ children }) {
       getContributorsByOrganization,
 
       getTransactionsByOrganization,
+      getWalletByOrganization,
+      getPaymentMethodsByOrganization,
+
+      getCampaignsByOrganization,
+
+      getAllContributors,
 
       getAlerts,
     }),
@@ -179,6 +279,10 @@ export function OrganizationProvider({ children }) {
       addContributor,
       getContributorsByOrganization,
       getTransactionsByOrganization,
+      getWalletByOrganization,
+      getCampaignsByOrganization,
+      getPaymentMethodsByOrganization,
+      getAllContributors,
       getAlerts,
     ],
   );

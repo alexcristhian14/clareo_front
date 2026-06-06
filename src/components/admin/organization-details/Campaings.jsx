@@ -4,7 +4,7 @@ import { useOrganizations } from "../../../contexts/OrganizationContext";
 
 export function Campaigns({ onAddCampaign }) {
   const navigate = useNavigate();
-  const { orgId } = useParams();
+  const { id: orgId } = useParams();
 
   const { getCampaignsByOrganization } = useOrganizations();
 

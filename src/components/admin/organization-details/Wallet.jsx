@@ -5,17 +5,13 @@ import { useParams } from "react-router-dom";
 import { useOrganizations } from "../../../contexts/OrganizationContext";
 
 export function Wallet({ onNewTransaction }) {
-  const walletData = {
-    total: "R$ 45.823,00",
-    available: "R$ 38.123,00",
-    blocked: "R$ 7.152,00",
-  };
-
   const { id: orgId } = useParams();
 
-  const { getTransactionsByOrganization } = useOrganizations();
+  const { getTransactionsByOrganization, getWalletByOrganization } =
+    useOrganizations();
 
   const transactions = getTransactionsByOrganization(orgId);
+  const walletData = getWalletByOrganization(orgId);
 
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -24,7 +20,10 @@ export function Wallet({ onNewTransaction }) {
         <div className="h-20 px-3.5 py-3 bg-white rounded-[10px] shadow border flex flex-col">
           <span className="text-slate-700 font-extrabold">Saldo total</span>
           <span className="text-[#4269B4] font-black text-xl">
-            {walletData.total}
+            {walletData.total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
           </span>
         </div>
 
@@ -33,14 +32,20 @@ export function Wallet({ onNewTransaction }) {
             Saldo disponível
           </span>
           <span className="text-green-400 font-black text-xl">
-            {walletData.available}
+            {walletData.available.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
           </span>
         </div>
 
         <div className="h-20 px-3.5 py-3 bg-white rounded-[10px] shadow border flex flex-col">
           <span className="text-slate-700 font-extrabold">Saldo bloqueado</span>
           <span className="text-red-500 font-black text-xl">
-            {walletData.blocked}
+            {walletData.blocked.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
           </span>
         </div>
       </div>
