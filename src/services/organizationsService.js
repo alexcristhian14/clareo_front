@@ -2,7 +2,7 @@
 
 const mockOrganizations = [
   {
-    id: "ORG-001",
+    id: 1,
     nome: "Instituto Saúde Viva",
     dataCadastro: "12/03/2026",
     membros: 24,
@@ -10,7 +10,7 @@ const mockOrganizations = [
     transacoes: 1245,
   },
   {
-    id: "ORG-002",
+    id: 2,
     nome: "Casa Esperança",
     dataCadastro: "15/03/2026",
     membros: 18,
@@ -18,7 +18,7 @@ const mockOrganizations = [
     transacoes: 800,
   },
   {
-    id: "ORG-003",
+    id: 3,
     nome: "Projeto Futuro",
     dataCadastro: "20/03/2026",
     membros: 35,

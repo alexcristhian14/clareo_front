@@ -21,20 +21,22 @@ import { CreateTransactionModal } from "../../components/admin/organization-deta
 import { CreateCampaignModal } from "../../components/admin/organization-details/modals/CreateCampaignModal";
 import { CreatePaymentMethodModal } from "../../components/admin/organization-details/modals/CreatePaymentMethodModal";
 
-function useOrganizationById(orgId) {
-  return {
-    id: orgId,
-    name: "Instituto Saúde Viva",
-    members: 24,
-    status: "Ativa",
-    transactions: 1245,
-  };
-}
+import { useOrganizations } from "../../contexts/OrganizationContext";
 
 export function OrganizationDetails() {
-  const { orgId } = useParams();
+  const {
+    getOrganizationById,
+    getContributorsByOrganization,
+    getTransactionsByOrganization,
+  } = useOrganizations();
 
-  const organization = useOrganizationById(orgId);
+  const { id } = useParams();
+
+  const organization = getOrganizationById(id);
+
+  const contributors = getContributorsByOrganization(id);
+
+  const transactions = getTransactionsByOrganization(id);
 
   const [tab, setTab] = useState("overview");
 
@@ -67,9 +69,7 @@ export function OrganizationDetails() {
               <OrganizationStats />
             </div>
 
-            <TransactionsTable
-              onAddTransaction={() => setShowTransactionModal(true)}
-            />
+            <TransactionsTable transactions={transactions.slice(0,3)} />
           </div>
         )}
 
@@ -86,7 +86,7 @@ export function OrganizationDetails() {
               </button>
             </div>
 
-            <ContributorsTable />
+            <ContributorsTable contributors={contributors} />
           </div>
         )}
 

@@ -12,17 +12,17 @@ export function OrganizationRow({ org }) {
     <div className="grid grid-cols-7 items-center px-8 py-4 border-t border-slate-200 hover:bg-slate-50 transition">
       <span>{org.id}</span>
 
-      <span>{org.nome}</span>
+      <span>{org.name}</span>
 
-      <span>{org.dataCadastro}</span>
+      <span>{org.createdAt}</span>
 
-      <span>{org.membros}</span>
+      <span>{org.members}</span>
 
       <span className={org.status === "Ativa" ? "text-green-500 font-medium" : "text-red-500 font-medium"}>
         {org.status}
       </span>
 
-      <span>{org.transacoes}</span>
+      <span>{org.transactions}</span>
 
       <button
         onClick={handleDetails}

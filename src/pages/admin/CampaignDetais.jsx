@@ -5,30 +5,23 @@ import AdminLayout from "../../layouts/AdminLayout";
 import { CampaignDetailsBase } from "../../features/campaign/CampaignDetailsBase";
 import { EditCampaignModal } from "../../components/common/modals/EditCampaignModal";
 import { DeleteCampaignModal } from "../../components/common/modals/DeleteCampaignModal";
+import { useCampaigns } from "../../contexts/CampaignContext";
 
 export function CampaignDetails() {
   const { campaignId } = useParams();
+  const { getCampaignById, updateCampaign, closeCampaign } = useCampaigns();
 
-  const [campaign, setCampaign] = useState({
-    title: "Acompanhamento Médico Itinerante",
-    organization: "Instituto Saúde Viva",
-    raised: 25000,
-    goal: 50000,
-    donors: 142,
-    daysLeft: 18,
-    description:
-      "Equipe médica volante para atender comunidades rurais sem acesso a postos de saúde.",
-  });
+  const campaign = getCampaignById(campaignId);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   function handleEditSave(updated) {
-    setCampaign(updated);
+    updateCampaign(campaign.id, updated);
   }
 
   function handleDelete() {
-    console.log("Excluir campanha:", campaignId);
+    closeCampaign(campaign.id);
     setIsDeleteOpen(false);
   }
 

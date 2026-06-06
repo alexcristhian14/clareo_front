@@ -1,54 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useOrganizations } from "../../contexts/OrganizationContext";
 import AdminLayout from "../../layouts/AdminLayout";
 
 import { ContributorsToolbar } from "../../components/admin/contributors/ContributorsToolbar";
 import { ContributorsTable } from "../../components/admin/contributors/ContributorsTable";
 import { CreateContributorModal } from "../../components/admin/organization-details/modals/CreateContributorModal";
 
-// MOCK (troca por API depois)
-const mockContributors = [
-  {
-    id: 1,
-    name: "João Felipe Lima",
-    email: "joao@org.com",
-    role: "Admin",
-    date: "14/01/2026",
-    organization: "Instituto Nova Vida",
-  },
-  {
-    id: 2,
-    name: "Maria Silva",
-    email: "maria@org.com",
-    role: "Member",
-    date: "12/01/2026",
-    organization: "Instituto Saúde Viva",
-  },
-];
-
 export function Contributors() {
-  const [contributors, setContributors] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-
-  // simula API
-  useEffect(() => {
-    setContributors(mockContributors);
-  }, []);
+  const { contributors, addContributor } = useOrganizations();
 
   // filtro
   const filteredContributors = contributors.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  // criar contribuidor (mock)
   function handleCreate(data) {
-    const newContributor = {
-      id: Date.now(),
-      ...data,
-      date: new Date().toLocaleDateString("pt-BR"),
-    };
-
-    setContributors((prev) => [newContributor, ...prev]);
+    addContributor(data);
   }
 
   return (

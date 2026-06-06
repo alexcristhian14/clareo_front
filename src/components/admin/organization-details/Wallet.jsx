@@ -1,72 +1,21 @@
 import { Plus } from "lucide-react";
 import { TransactionsTable } from "./TransactionsTable";
 import { CreateTransactionModal } from "./modals/CreateTransactionModal";
+import { useParams } from "react-router-dom";
+import { useOrganizations } from "../../../contexts/OrganizationContext";
 
-export function Wallet( { onNewTransaction } ) {
+export function Wallet({ onNewTransaction }) {
   const walletData = {
     total: "R$ 45.823,00",
     available: "R$ 38.123,00",
     blocked: "R$ 7.152,00",
   };
 
-  const transactions = [
-    {
-      date: "28/05/2026",
-      time: "07:15:35",
-      member: "00525",
-      type: "Crédito",
-      value: "R$ 500,00",
-      status: "Efetivada",
-    },
-    {
-      date: "28/05/2026",
-      time: "07:15:35",
-      member: "00525",
-      type: "Crédito",
-      value: "R$ 500,00",
-      status: "Pendente",
-    },
-    {
-      date: "28/05/2026",
-      time: "07:15:35",
-      member: "00525",
-      type: "Crédito",
-      value: "R$ 500,00",
-      status: "Cancelada",
-    },
-        {
-      date: "28/05/2026",
-      time: "07:15:35",
-      member: "00525",
-      type: "Crédito",
-      value: "R$ 500,00",
-      status: "Cancelada",
-    },
-        {
-      date: "28/05/2026",
-      time: "07:15:35",
-      member: "00525",
-      type: "Crédito",
-      value: "R$ 500,00",
-      status: "Cancelada",
-    },
-        {
-      date: "28/05/2026",
-      time: "07:15:35",
-      member: "00525",
-      type: "Crédito",
-      value: "R$ 500,00",
-      status: "Cancelada",
-    },
-        {
-      date: "28/05/2026",
-      time: "07:15:35",
-      member: "00525",
-      type: "Crédito",
-      value: "R$ 500,00",
-      status: "Cancelada",
-    },
-  ];
+  const { id: orgId } = useParams();
+
+  const { getTransactionsByOrganization } = useOrganizations();
+
+  const transactions = getTransactionsByOrganization(orgId);
 
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -99,8 +48,9 @@ export function Wallet( { onNewTransaction } ) {
       {/* BOTÃO */}
       <div className="flex justify-end">
         <button
-         onClick={onNewTransaction}
-         className="w-56 p-2.5 bg-blue-600 text-white rounded-[5px] font-bold flex items-center justify-center gap-2">
+          onClick={onNewTransaction}
+          className="w-56 p-2.5 bg-blue-600 text-white rounded-[5px] font-bold flex items-center justify-center gap-2"
+        >
           <Plus size={18} />
           Nova Transação
         </button>

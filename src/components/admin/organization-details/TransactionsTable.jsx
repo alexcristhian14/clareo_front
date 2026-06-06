@@ -1,43 +1,8 @@
 import { StatusBadge } from "./StatusBadge";
 
-// 🔥 MOCK PRA TESTE (remove depois quando integrar API)
-const mockTransactions = [
-  {
-    date: "28/05/2026",
-    time: "07:15:35",
-    member: "00525",
-    type: "Crédito",
-    value: "R$ 500,00",
-    status: "Efetivada",
-  },
-  {
-    date: "28/05/2026",
-    time: "09:42:10",
-    member: "00412",
-    type: "Crédito",
-    value: "R$ 120,00",
-    status: "Pendente",
-  },
-  {
-    date: "27/05/2026",
-    time: "18:05:22",
-    member: "00981",
-    type: "Débito",
-    value: "R$ 75,50",
-    status: "Cancelada",
-  },
-  {
-    date: "27/05/2026",
-    time: "14:33:01",
-    member: "00219",
-    type: "Crédito",
-    value: "R$ 1.250,00",
-    status: "Efetivada",
-  },
-];
 
 export function TransactionsTable({
-  transactions = mockTransactions,
+  transactions = [],
   title = "Transações recentes",
 }) {
   return (

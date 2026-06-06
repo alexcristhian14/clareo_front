@@ -1,3 +1,5 @@
+// REFERE-SE A WALLET DO DOADOR
+
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import {
   getBalance,
