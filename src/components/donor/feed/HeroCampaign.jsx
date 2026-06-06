@@ -4,8 +4,10 @@ import { Heart } from "lucide-react";
 export function HeroCampaign({ campaign }) {
   const navigate = useNavigate();
 
-  const progress =
-    (campaign.raised / campaign.goal) * 100;
+  const raised = Number(campaign?.raised || 0);
+  const goal = Number(campaign?.goal || 0);
+
+  const progress = goal > 0 ? (raised / goal) * 100 : 0;
 
   function handleDonate() {
     navigate(`/donor/campaigns/${campaign.id}`, {
@@ -21,15 +23,15 @@ export function HeroCampaign({ campaign }) {
       </p>
 
       <h1 className="text-3xl font-bold mt-2">
-        {campaign.title}
+        {campaign?.title}
       </h1>
 
       <p className="mt-3 max-w-3xl opacity-90">
-        {campaign.description}
+        {campaign?.description}
       </p>
 
       <div className="mt-4 text-sm opacity-80">
-        por {campaign.organization}
+        por {campaign?.organization}
       </div>
 
       {/* PROGRESSO */}
@@ -37,11 +39,11 @@ export function HeroCampaign({ campaign }) {
 
         <div className="flex justify-between text-sm mb-2">
           <span>
-            R$ {campaign.raised.toLocaleString("pt-BR")}
+            R$ {raised.toLocaleString("pt-BR")}
           </span>
 
           <span>
-            R$ {campaign.goal.toLocaleString("pt-BR")}
+            R$ {goal.toLocaleString("pt-BR")}
           </span>
         </div>
 
@@ -65,32 +67,14 @@ export function HeroCampaign({ campaign }) {
           onClick={() =>
             navigate(`/donor/campaigns/${campaign.id}`)
           }
-          className="
-            px-6 py-3
-            rounded-lg
-            border border-white/30
-            font-semibold
-            hover:bg-white/10
-            transition
-          "
+          className="px-6 py-3 rounded-lg border border-white/30 font-semibold hover:bg-white/10 transition"
         >
           Ver campanha
         </button>
 
         <button
           onClick={handleDonate}
-          className="
-            px-6 py-3
-            rounded-lg
-            bg-white
-            text-slate-700
-            font-bold
-            flex
-            items-center
-            gap-2
-            hover:bg-slate-100
-            transition
-          "
+          className="px-6 py-3 rounded-lg bg-white text-slate-700 font-bold flex items-center gap-2 hover:bg-slate-100 transition"
         >
           <Heart size={18} />
           Doar agora

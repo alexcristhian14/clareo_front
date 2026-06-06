@@ -25,7 +25,7 @@ export function CampaignProvider({ children }) {
         raised: 25000,
         goal: 50000,
         description: "Equipe médica volante para atender comunidades rurais.",
-        startDate: "2026-06-06"
+        startDate: "2026-06-06",
       },
       {
         id: 2,
