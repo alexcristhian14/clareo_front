@@ -9,18 +9,20 @@ import { useCampaigns } from "../../contexts/CampaignContext";
 import { useWallet } from "../../contexts/WalletContext";
 
 export function CampaignDetails() {
+  console.log("MONTOU CampaignDetails");
   const { campaignId } = useParams();
 
-  const { campaigns } = useCampaigns();
+  const { getCampaignById, loading } = useCampaigns();
   const { donate } = useWallet();
 
   const [isDonateOpen, setIsDonateOpen] = useState(false);
 
-  const campaign = campaigns.find(
-    (c) => String(c.id) === String(campaignId)
-  );
+  const campaign = getCampaignById(campaignId);
 
-  if (!campaign) {
+  const ctx = useCampaigns();
+  console.log("CAMPAIGN CONTEXT:", ctx);
+
+  if (loading) {
     return (
       <DonorLayout title="Carregando..." description="">
         <p>Carregando campanha...</p>
@@ -28,9 +30,16 @@ export function CampaignDetails() {
     );
   }
 
+  if (!campaign) {
+    return (
+      <DonorLayout title="Não encontrada" description="">
+        <p>Campanha não existe.</p>
+      </DonorLayout>
+    );
+  }
+
   async function handleDonate({ amount }) {
     await donate(campaign.id, amount);
-
     setIsDonateOpen(false);
   }
 

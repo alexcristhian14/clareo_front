@@ -25,6 +25,7 @@ export function CampaignProvider({ children }) {
         raised: 25000,
         goal: 50000,
         description: "Equipe médica volante para atender comunidades rurais.",
+        startDate: "2026-06-06"
       },
       {
         id: 2,
@@ -34,15 +35,17 @@ export function CampaignProvider({ children }) {
         raised: 18000,
         goal: 25000,
         description: "Campanha para ampliar a cobertura vacinal.",
+        startDate: "2026-06-06"
       },
       {
         id: 3,
-        organizationId: 1,
+        organizationId: 2,
         title: "Medicamentos para Comunidades",
         organization: "Instituto Saúde Viva",
         raised: 12000,
         goal: 30000,
         description: "Distribuição de medicamentos essenciais.",
+        startDate: "2026-06-06"
       },
       {
         id: 4,
@@ -52,6 +55,7 @@ export function CampaignProvider({ children }) {
         raised: 38000,
         goal: 45000,
         description: "Levar educação de qualidade para áreas rurais.",
+        startDate: "2026-06-06"
       },
       {
         id: 5,
@@ -61,6 +65,7 @@ export function CampaignProvider({ children }) {
         raised: 28000,
         goal: 30000,
         description: "Distribuição de alimentos para famílias vulneráveis.",
+        startDate: "2026-06-06"
       },
     ];
 
@@ -78,23 +83,27 @@ export function CampaignProvider({ children }) {
 
   const getCampaignById = useCallback(
     (id) => campaigns.find((c) => String(c.id) === String(id)),
-    [campaigns]
+    [campaigns],
   );
 
-  const getCampaignsByOrganization = useCallback(
-    (organizationId) =>
-      campaigns.filter(
-        (c) => Number(c.organizationId) === Number(organizationId)
-      ),
-    [campaigns]
-  );
+const getCampaignsByOrganization = useCallback(
+  (organizationId) => {
+    if (!organizationId) return [];
+
+    return campaigns.filter(
+      (c) =>
+        String(c.organizationId) === String(organizationId)
+    );
+  },
+  [campaigns]
+);
 
   // =========================
   // FEED QUERIES
   // =========================
 
   const getFeaturedCampaign = useCallback(() => {
-    return campaigns?.[0] || null;
+    return campaigns.filter((c) => c.featured === true);
   }, [campaigns]);
 
   const getTrendingCampaigns = useCallback(
@@ -103,19 +112,16 @@ export function CampaignProvider({ children }) {
         .sort((a, b) => (b.raised || 0) - (a.raised || 0))
         .slice(0, limit);
     },
-    [campaigns]
+    [campaigns],
   );
 
   const getEndingCampaigns = useCallback(
     (limit = 4) => {
       return [...campaigns]
-        .sort(
-          (a, b) =>
-            (b.raised / b.goal) - (a.raised / a.goal)
-        )
+        .sort((a, b) => b.raised / b.goal - a.raised / a.goal)
         .slice(0, limit);
     },
-    [campaigns]
+    [campaigns],
   );
 
   // =========================
@@ -135,7 +141,7 @@ export function CampaignProvider({ children }) {
           ...c,
           raised: Number(c.raised || 0) + value,
         };
-      })
+      }),
     );
   }, []);
 
@@ -146,10 +152,7 @@ export function CampaignProvider({ children }) {
   const stats = useMemo(() => {
     return {
       totalCampaigns: campaigns.length,
-      totalRaised: campaigns.reduce(
-        (acc, c) => acc + Number(c.raised || 0),
-        0
-      ),
+      totalRaised: campaigns.reduce((acc, c) => acc + Number(c.raised || 0), 0),
     };
   }, [campaigns]);
 
@@ -165,6 +168,7 @@ export function CampaignProvider({ children }) {
         getFeaturedCampaign,
         getTrendingCampaigns,
         getEndingCampaigns,
+        
 
         updateCampaignAfterDonation,
 

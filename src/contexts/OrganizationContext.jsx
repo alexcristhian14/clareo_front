@@ -24,6 +24,21 @@ const initialOrganizations = [
     status: "Ativa",
     transactions: 1245,
   },
+    {
+    id: 2,
+    name: "Seu Bairro Seguro",
+    description: "...",
+
+    campaignsCount: 110,
+    supporters: 2134,
+    raised: 85000,
+    years: 10,
+
+    createdAt: "06/06/2026",
+    members: 20,
+    status: "Ativa",
+    transactions: 1000,
+  },
 ];
 
 const initialContributors = [
@@ -121,6 +136,13 @@ const initialPaymentMethods = [
   },
 ];
 
+const initialUserOrganizations = {
+  donor: {
+    id: 1,
+    name: "Alex",
+    organizationIds: [1, 3],
+  },
+};
 export function OrganizationProvider({ children }) {
   // 🟢 TODOS OS STATES CORRETAMENTE DENTRO DO COMPONENTE
   const [organizations, setOrganizations] = useState(initialOrganizations);
@@ -129,6 +151,7 @@ export function OrganizationProvider({ children }) {
   const [currentOrgId] = useState(1); // Simula o ID da organização logada por padrão
   const [campaigns, setCampaigns] = useState(initialCampaigns);
   const [paymentMethods, setPaymentMethods] = useState(initialPaymentMethods);
+  const [userOrganizations] = useState(initialUserOrganizations);
 
   // =====================
   // ORGANIZATION
@@ -246,26 +269,27 @@ export function OrganizationProvider({ children }) {
   }, []);
 
   const getDashboardStats = useCallback(() => {
-    const totalRevenue = transactions.reduce((acc, t) => {
-      return acc + Number(t.amount || 0);
-    }, 0);
+  const balance = transactions.reduce((acc, t) => {
+    return acc + Number(t.amount || 0);
+  }, 0);
 
-    const totalTransactions = transactions.length;
+  const monthlyRaised = transactions.reduce((acc, t) => {
+    return acc + Number(t.amount || 0);
+  }, 0);
 
-    const totalContributors = contributors.length;
+  const donors = contributors.length;
 
-    const activeCampaigns = organizations.filter(
-      (o) => o.status === "Ativa",
-    ).length;
+  const activeCampaigns = organizations.filter(
+    (o) => o.status === "Ativa",
+  ).length;
 
-    return {
-      totalRevenue,
-      totalTransactions,
-      totalContributors,
-      activeCampaigns,
-    };
-  }, [transactions, contributors, organizations]);
-
+  return {
+    balance,
+    monthlyRaised,
+    donors,
+    activeCampaigns,
+  };
+}, [transactions, contributors, organizations]);
   const getRevenueChartData = useCallback(() => {
     const map = {};
 
@@ -302,6 +326,8 @@ export function OrganizationProvider({ children }) {
       currentOrgId,
       paymentMethods,
 
+      userOrganizations,
+
       getOrganizationById,
       updateOrganization,
 
@@ -327,6 +353,7 @@ export function OrganizationProvider({ children }) {
       contributors,
       transactions,
       currentOrgId,
+      userOrganizations,
       getOrganizationById,
       updateOrganization,
       addContributor,

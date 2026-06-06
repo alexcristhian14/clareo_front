@@ -7,11 +7,23 @@ import {
 import { useOrganizations } from "../../../contexts/OrganizationContext";
 
 export function CampaignsStats() {
-  const { campaigns } = useOrganizations();
+  const { campaigns = [] } = useOrganizations();
 
-  const totalGoal = campaigns.reduce((a, c) => a + c.goal, 0);
-  const totalRaised = campaigns.reduce((a, c) => a + c.raised, 0);
-  const active = campaigns.filter((c) => c.status === "Ativa");
+  const safeCampaigns = Array.isArray(campaigns) ? campaigns : [];
+
+  const totalGoal = safeCampaigns.reduce(
+    (a, c) => a + (c.goal || 0),
+    0
+  );
+
+  const totalRaised = safeCampaigns.reduce(
+    (a, c) => a + (c.raised || 0),
+    0
+  );
+
+  const active = safeCampaigns.filter(
+    (c) => c.status === "Ativa"
+  );
 
   const stats = [
     {

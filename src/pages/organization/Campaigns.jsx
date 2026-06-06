@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import OrganizationLayout from "../../layouts/OrganizationLayout";
 
 import { useOrganizations } from "../../contexts/OrganizationContext";
+import { useCampaigns } from "../../contexts/CampaignContext";
 
 import { CreateCampaignModal } from "../../components/admin/organization-details/modals/CreateCampaignModal";
 import { CampaignsStats } from "../../components/organization/campaigns/CampaignsStats";
@@ -11,10 +12,12 @@ import { CampaignsToolbar } from "../../components/organization/campaigns/Campai
 import { CampaignsTable } from "../../components/organization/campaigns/CampaignsTable";
 
 export function Campaigns() {
+  const { currentOrgId } = useOrganizations();
+
   const {
-    campaigns,
+    getCampaignsByOrganization,
     addCampaign,
-  } = useOrganizations();
+  } = useCampaigns();
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
@@ -24,9 +27,18 @@ export function Campaigns() {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const campaigns =
+    getCampaignsByOrganization(currentOrgId) ?? [];
+
+  console.log("currentOrgId:", currentOrgId);
+  console.log("campaigns raw:", campaigns);
+
   function handleCreate(data) {
     try {
-      addCampaign(data);
+      addCampaign({
+        ...data,
+        organizationId: currentOrgId,
+      });
 
       toast.success("Campanha criada com sucesso!");
       setIsOpen(false);
@@ -35,16 +47,18 @@ export function Campaigns() {
     }
   }
 
-  const filteredCampaigns = campaigns.filter((c) => {
-    const matchSearch = c.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
+  const filteredCampaigns = (Array.isArray(campaigns) ? campaigns : []).filter(
+    (c) => {
+      const matchSearch = c.title
+        ?.toLowerCase()
+        .includes(search.toLowerCase());
 
-    const matchStatus = status ? c.status === status : true;
-    const matchGoal = minGoal ? c.goal >= Number(minGoal) : true;
+      const matchStatus = status ? c.status === status : true;
+      const matchGoal = minGoal ? c.goal >= Number(minGoal) : true;
 
-    return matchSearch && matchStatus && matchGoal;
-  });
+      return matchSearch && matchStatus && matchGoal;
+    }
+  );
 
   return (
     <OrganizationLayout
@@ -52,7 +66,7 @@ export function Campaigns() {
       description="Gerencie as campanhas da sua organização"
     >
       <div className="flex flex-col gap-8">
-        <CampaignsStats />
+        <CampaignsStats campaigns={campaigns} />
 
         <CampaignsToolbar
           search={search}

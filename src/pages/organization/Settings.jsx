@@ -1,50 +1,33 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import OrganizationLayout from "../../layouts/OrganizationLayout";
 import { Button } from "../../components/common/Button";
 import { useOrganizations } from "../../contexts/OrganizationContext";
+import { useSettings } from "../../contexts/SettingsContext";
 
 export function Settings() {
-  const { getOrganizationById, updateOrganization } =
-    useOrganizations();
-
   const organizationId = 1; // depois vem do auth
+
+  const { getOrganizationById } = useOrganizations();
+  const {
+    organizationSettings,
+    updateOrganizationSettings,
+    saveOrganizationSettings,
+  } = useSettings();
 
   const org = getOrganizationById(organizationId);
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-
-  const [receiveNotifications, setReceiveNotifications] =
-    useState(true);
-  const [publicCampaigns, setPublicCampaigns] = useState(true);
-
-  const [logo, setLogo] = useState(null);
-
+  // sync org → settings context
   useEffect(() => {
     if (!org) return;
 
-    setName(org.name);
-    setDescription(org.description);
-    setEmail(org.email || "");
-    setPhone(org.phone || "");
+    updateOrganizationSettings("name", org.name || "");
+    updateOrganizationSettings("description", org.description || "");
+    updateOrganizationSettings("email", org.email || "");
+    updateOrganizationSettings("phone", org.phone || "");
   }, [org]);
 
   function handleSave() {
-    updateOrganization?.(organizationId, {
-      name,
-      description,
-      email,
-      phone,
-    });
-
-    console.log("SETTINGS SALVAS NO CONTEXT");
-  }
-
-  function handleLogoChange(e) {
-    const file = e.target.files?.[0];
-    if (file) setLogo(file);
+    saveOrganizationSettings();
   }
 
   return (
@@ -61,52 +44,35 @@ export function Settings() {
             Perfil da organização
           </h2>
 
-          {/* LOGO */}
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border">
-              {logo ? (
-                <img
-                  src={URL.createObjectURL(logo)}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="text-xs text-zinc-400">
-                  Logo
-                </span>
-              )}
-            </div>
-
-            <label className="text-sm text-blue-600 cursor-pointer font-semibold">
-              Alterar logo
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleLogoChange}
-              />
-            </label>
-          </div>
-
           <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={organizationSettings.name}
+            onChange={(e) =>
+              updateOrganizationSettings("name", e.target.value)
+            }
             className="w-full p-2 bg-neutral-100 rounded-[10px]"
           />
 
           <input
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={organizationSettings.description}
+            onChange={(e) =>
+              updateOrganizationSettings("description", e.target.value)
+            }
             className="w-full p-2 bg-neutral-100 rounded-[10px]"
           />
 
           <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={organizationSettings.email}
+            onChange={(e) =>
+              updateOrganizationSettings("email", e.target.value)
+            }
             className="w-full p-2 bg-neutral-100 rounded-[10px]"
           />
 
           <input
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            value={organizationSettings.phone}
+            onChange={(e) =>
+              updateOrganizationSettings("phone", e.target.value)
+            }
             className="w-full p-2 bg-neutral-100 rounded-[10px]"
           />
         </div>

@@ -6,6 +6,7 @@ import { WalletProvider } from "./contexts/WalletContext";
 import { CampaignProvider } from "./contexts/CampaignContext";
 import { AssociationProvider } from "./contexts/AssociationContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 
 // 🛡 PROTECTED ROUTE
 import { ProtectedRoute } from "./routes/ProtectedRoute";
@@ -45,186 +46,188 @@ import { Settings as DonorSettings } from "./pages/donor/Settings";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <WalletProvider>
-        <CampaignProvider>
-          <AssociationProvider>
-            <OrganizationProvider>
-              <BrowserRouter>
-                <Routes>
-                  {/* ================= LOGIN ================= */}
-                  <Route path="/" element={<Login />} />
+    <SettingsProvider>
+      <AuthProvider>
+        <WalletProvider>
+          <CampaignProvider>
+            <AssociationProvider>
+              <OrganizationProvider>
+                <BrowserRouter>
+                  <Routes>
+                    {/* ================= LOGIN ================= */}
+                    <Route path="/" element={<Login />} />
 
-                  {/* ================= ADMIN ================= */}
-                  <Route
-                    path="/admin/dashboard"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    }
-                  />
+                    {/* ================= ADMIN ================= */}
+                    <Route
+                      path="/admin/dashboard"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/admin/organizations"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <Organizations />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/admin/organizations"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <Organizations />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/admin/organizations/:id"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <OrganizationDetails />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/admin/organizations/:id"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <OrganizationDetails />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/admin/contributors"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <Contributors />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/admin/contributors"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <Contributors />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/admin/settings"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <Settings />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/admin/settings"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <Settings />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/admin/organizations/:orgId/campaigns/:campaignId"
-                    element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <CampaignDetails />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/admin/organizations/:orgId/campaigns/:campaignId"
+                      element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                          <CampaignDetails />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  {/* ================= ORGANIZATION ================= */}
-                  <Route
-                    path="/organization/dashboard"
-                    element={
-                      <ProtectedRoute allowedRoles={["organization"]}>
-                        <OrgDashboard />
-                      </ProtectedRoute>
-                    }
-                  />
+                    {/* ================= ORGANIZATION ================= */}
+                    <Route
+                      path="/organization/dashboard"
+                      element={
+                        <ProtectedRoute allowedRoles={["organization"]}>
+                          <OrgDashboard />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/organization/campaigns"
-                    element={
-                      <ProtectedRoute allowedRoles={["organization"]}>
-                        <OrgCampaigns />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/organization/campaigns"
+                      element={
+                        <ProtectedRoute allowedRoles={["organization"]}>
+                          <OrgCampaigns />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/organization/campaigns/:campaignId"
-                    element={
-                      <ProtectedRoute allowedRoles={["organization"]}>
-                        <OrgCampaignDetails />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/organization/campaigns/:campaignId"
+                      element={
+                        <ProtectedRoute allowedRoles={["organization"]}>
+                          <CampaignDetails />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/organization/contributors"
-                    element={
-                      <ProtectedRoute allowedRoles={["organization"]}>
-                        <OrgContributors />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/organization/contributors"
+                      element={
+                        <ProtectedRoute allowedRoles={["organization"]}>
+                          <OrgContributors />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/organization/settings"
-                    element={
-                      <ProtectedRoute allowedRoles={["organization"]}>
-                        <OrgSettings />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/organization/settings"
+                      element={
+                        <ProtectedRoute allowedRoles={["organization"]}>
+                          <OrgSettings />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  {/* ================= DONOR ================= */}
-                  <Route
-                    path="/donor/feed"
-                    element={
-                      <ProtectedRoute allowedRoles={["donor"]}>
-                        <DonorFeed />
-                      </ProtectedRoute>
-                    }
-                  />
+                    {/* ================= DONOR ================= */}
+                    <Route
+                      path="/donor/feed"
+                      element={
+                        <ProtectedRoute allowedRoles={["donor"]}>
+                          <DonorFeed />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/donor/campaigns"
-                    element={
-                      <ProtectedRoute allowedRoles={["donor"]}>
-                        <DonorCampaigns />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/donor/campaigns"
+                      element={
+                        <ProtectedRoute allowedRoles={["donor"]}>
+                          <DonorCampaigns />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/donor/organizations"
-                    element={
-                      <ProtectedRoute allowedRoles={["donor"]}>
-                        <DonorOrganizations />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/donor/organizations"
+                      element={
+                        <ProtectedRoute allowedRoles={["donor"]}>
+                          <DonorOrganizations />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/donor/campaigns/:campaignId"
-                    element={
-                      <ProtectedRoute allowedRoles={["donor"]}>
-                        <DonorCampaignDetails />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/donor/campaigns/:campaignId"
+                      element={
+                        <ProtectedRoute allowedRoles={["donor"]}>
+                          <DonorCampaignDetails />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/donor/organizations/:organizationId"
-                    element={
-                      <ProtectedRoute allowedRoles={["donor"]}>
-                        <DonorOrganizationDetails />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/donor/organizations/:organizationId"
+                      element={
+                        <ProtectedRoute allowedRoles={["donor"]}>
+                          <DonorOrganizationDetails />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/donor/wallet"
-                    element={
-                      <ProtectedRoute allowedRoles={["donor"]}>
-                        <DonorWallet />
-                      </ProtectedRoute>
-                    }
-                  />
+                    <Route
+                      path="/donor/wallet"
+                      element={
+                        <ProtectedRoute allowedRoles={["donor"]}>
+                          <DonorWallet />
+                        </ProtectedRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/donor/settings"
-                    element={
-                      <ProtectedRoute allowedRoles={["donor"]}>
-                        <DonorSettings />
-                      </ProtectedRoute>
-                    }
-                  />
-                </Routes>
-              </BrowserRouter>
-            </OrganizationProvider>
-          </AssociationProvider>
-        </CampaignProvider>
-      </WalletProvider>
-    </AuthProvider>
+                    <Route
+                      path="/donor/settings"
+                      element={
+                        <ProtectedRoute allowedRoles={["donor"]}>
+                          <DonorSettings />
+                        </ProtectedRoute>
+                      }
+                    />
+                  </Routes>
+                </BrowserRouter>
+              </OrganizationProvider>
+            </AssociationProvider>
+          </CampaignProvider>
+        </WalletProvider>
+      </AuthProvider>
+    </SettingsProvider>
   );
 }

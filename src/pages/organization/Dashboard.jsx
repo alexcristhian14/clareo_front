@@ -10,14 +10,18 @@ export function Dashboard() {
   const {
     getDashboardStats,
     getRevenueChartData,
-    getFeaturedCampaigns,
+    campaigns,
     getAlerts,
   } = useOrganizations();
 
   const stats = getDashboardStats();
   const revenue = getRevenueChartData();
-  const campaigns = getFeaturedCampaigns();
   const alerts = getAlerts();
+
+  // aqui você define “featured” de forma simples (sem depender de função inexistente)
+  const featuredCampaigns = (campaigns || [])
+    .filter((c) => c.status === "Ativa")
+    .slice(0, 3);
 
   return (
     <OrganizationLayout
@@ -32,7 +36,7 @@ export function Dashboard() {
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           <div className="xl:col-span-2">
-            <FeaturedCampaigns campaigns={campaigns} />
+            <FeaturedCampaigns campaigns={featuredCampaigns} />
           </div>
 
           <AlertsPanel alerts={alerts} />

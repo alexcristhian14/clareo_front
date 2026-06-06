@@ -1,14 +1,14 @@
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export function CampaignsTable({ campaigns }) {
+export function CampaignsTable({ campaigns = [] }) {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white rounded-[10px] border border-zinc-300 shadow-[0px_7px_30px_-4px_rgba(0,0,0,0.21)] overflow-hidden">
+    <div className="bg-white rounded-[10px] border border-zinc-300 shadow overflow-hidden">
       {/* HEADER */}
       <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_220px] px-8 py-4 bg-slate-100 font-semibold text-slate-800">
-        <span>NOME</span>
+        <span>TÍTULO</span>
         <span>META</span>
         <span>ARRECADADO</span>
         <span>PROGRESSO</span>
@@ -19,30 +19,32 @@ export function CampaignsTable({ campaigns }) {
 
       {/* ROWS */}
       {campaigns.map((campaign) => {
-        const progress = (campaign.raised / campaign.goal) * 100;
+        const goal = Number(campaign.goal || 0);
+        const raised = Number(campaign.raised || 0);
+
+        const progress = goal > 0 ? (raised / goal) * 100 : 0;
 
         return (
           <div
             key={campaign.id}
             className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_220px] px-8 py-4 border-t items-center"
           >
-            <span className="font-medium">{campaign.name}</span>
+            <span className="font-medium">{campaign.title}</span>
 
-            <span>R$ {campaign.goal.toLocaleString("pt-BR")}</span>
+            <span>R$ {goal.toLocaleString("pt-BR")}</span>
 
-            <span>R$ {campaign.raised.toLocaleString("pt-BR")}</span>
+            <span>R$ {raised.toLocaleString("pt-BR")}</span>
 
             <span>{progress.toFixed(0)}%</span>
 
-            <span>{campaign.startDate}</span>
+            <span>{campaign.startDate || "-"}</span>
 
             <span>
               <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
-                {campaign.status}
+                {campaign.status || "Ativa"}
               </span>
             </span>
 
-            {/* ACTIONS */}
             <div className="flex justify-center">
               <button
                 onClick={() =>
