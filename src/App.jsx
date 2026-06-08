@@ -1,233 +1,271 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// 🔐 AUTH + WALLET + CAMPAIGNS
 import { AuthProvider } from "./contexts/AuthContext";
-import { WalletProvider } from "./contexts/WalletContext";
-import { CampaignProvider } from "./contexts/CampaignContext";
-import { AssociationProvider } from "./contexts/AssociationContext";
-import { OrganizationProvider } from "./contexts/OrganizationContext";
-import { SettingsProvider } from "./contexts/SettingsContext";
-
-// 🛡 PROTECTED ROUTE
 import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { OrgRoute } from "./routes/OrgRoute";
 
-// 🛑 LOGIN
 import { Login } from "./pages/Login";
+import { Vitrine } from "./pages/Vitrine";
+import { Home } from "./pages/Home";
+import { Profile } from "./pages/Profile";
+import { NewOrganization } from "./pages/NewOrganization";
+import { MinhasInstituicoes } from "./pages/MinhasInstituicoes";
 
-// =======================
-// ADMIN
-// =======================
-import { Dashboard } from "./pages/admin/Dashboard";
-import { Organizations } from "./pages/admin/Organizations";
-import { OrganizationDetails } from "./pages/admin/OrganizationDetails";
-import { Contributors } from "./pages/admin/Contributors";
-import { Settings } from "./pages/admin/Settings";
-import { CampaignDetails } from "./pages/admin/CampaignDetais";
+import { Dashboard } from "./pages/Dashboard";
+import { Campaigns } from "./pages/Campaigns";
+import { CampaignNew } from "./pages/CampaignNew";
+import { CampaignDetail } from "./pages/CampaignDetail";
+import { Expenses } from "./pages/Expenses";
+import { ExpenseNew } from "./pages/ExpenseNew";
+import { ExpenseDetail } from "./pages/ExpenseDetail";
+import { Contributors } from "./pages/Contributors";
+import { ContributorDetail } from "./pages/ContributorDetail";
+import { Wallet } from "./pages/Wallet";
+import { Transactions } from "./pages/Transactions";
+import { TransactionDetail } from "./pages/TransactionDetail";
+import { CreditLines } from "./pages/CreditLines";
+import { CreditLineNew } from "./pages/CreditLineNew";
+import { PaymentMethods } from "./pages/PaymentMethods";
+import { Memberships } from "./pages/Memberships";
+import { RecurringDonations } from "./pages/RecurringDonations";
+import { Settings } from "./pages/Settings";
+import { PrestacaoContas } from "./pages/PrestacaoContas";
 
-// =======================
-// ORGANIZATION
-// =======================
-import { Dashboard as OrgDashboard } from "./pages/organization/Dashboard";
-import { Campaigns as OrgCampaigns } from "./pages/organization/Campaigns";
-import { CampaignDetails as OrgCampaignDetails } from "./pages/organization/CampaignDetails";
-import { Contributors as OrgContributors } from "./pages/organization/Contributors";
-import { Settings as OrgSettings } from "./pages/organization/Settings";
-
-// =======================
-// DONOR
-// =======================
-import { Feed as DonorFeed } from "./pages/donor/Feed";
-import { Campaigns as DonorCampaigns } from "./pages/donor/Campaigns";
-import { CampaignDetails as DonorCampaignDetails } from "./pages/donor/CampaignDetails";
-import { OrganizationDetails as DonorOrganizationDetails } from "./pages/donor/OrganizationDetails";
-import { Organizations as DonorOrganizations } from "./pages/donor/Organizations";
-import { Wallet as DonorWallet } from "./pages/donor/Wallet";
-import { Settings as DonorSettings } from "./pages/donor/Settings";
+import { PublicDonate } from "./pages/PublicDonate";
+import { PublicAccountability } from "./pages/PublicAccountability";
 
 export default function App() {
   return (
-    <SettingsProvider>
-      <AuthProvider>
-        <WalletProvider>
-          <CampaignProvider>
-            <AssociationProvider>
-              <OrganizationProvider>
-                <BrowserRouter>
-                  <Routes>
-                    {/* ================= LOGIN ================= */}
-                    <Route path="/" element={<Login />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Vitrine />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Login />} />
+          <Route
+            path="/minhas-instituicoes"
+            element={
+              <ProtectedRoute>
+                <MinhasInstituicoes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/carteira"
+            element={
+              <ProtectedRoute>
+                <Wallet />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/organizacoes/nova"
+            element={
+              <ProtectedRoute>
+                <NewOrganization />
+              </ProtectedRoute>
+            }
+          />
 
-                    {/* ================= ADMIN ================= */}
-                    <Route
-                      path="/admin/dashboard"
-                      element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                          <Dashboard />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/dashboard"
+            element={
+              <OrgRoute>
+                <Dashboard />
+              </OrgRoute>
+            }
+          />
 
-                    <Route
-                      path="/admin/organizations"
-                      element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                          <Organizations />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/campaigns"
+            element={
+              <OrgRoute>
+                <Campaigns />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/campaigns/new"
+            element={
+              <OrgRoute>
+                <CampaignNew />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/campaigns/:campaignId"
+            element={
+              <OrgRoute>
+                <CampaignDetail />
+              </OrgRoute>
+            }
+          />
 
-                    <Route
-                      path="/admin/organizations/:id"
-                      element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                          <OrganizationDetails />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/campaigns/:campaignId/expenses"
+            element={
+              <OrgRoute>
+                <Expenses />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/campaigns/:campaignId/expenses/new"
+            element={
+              <OrgRoute>
+                <ExpenseNew />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/campaigns/:campaignId/expenses/:expenseId"
+            element={
+              <OrgRoute>
+                <ExpenseDetail />
+              </OrgRoute>
+            }
+          />
 
-                    <Route
-                      path="/admin/contributors"
-                      element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                          <Contributors />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/contributors"
+            element={
+              <OrgRoute>
+                <Contributors />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/contributors/:contributorId"
+            element={
+              <OrgRoute>
+                <ContributorDetail />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/contributors/:contributorId/recurring"
+            element={
+              <OrgRoute>
+                <RecurringDonations />
+              </OrgRoute>
+            }
+          />
 
-                    <Route
-                      path="/admin/settings"
-                      element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                          <Settings />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/wallet"
+            element={
+              <OrgRoute>
+                <Wallet />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <OrgRoute>
+                <Transactions />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/transactions/:transactionId"
+            element={
+              <OrgRoute>
+                <TransactionDetail />
+              </OrgRoute>
+            }
+          />
 
-                    <Route
-                      path="/admin/organizations/:orgId/campaigns/:campaignId"
-                      element={
-                        <ProtectedRoute allowedRoles={["admin"]}>
-                          <CampaignDetails />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/credit-lines"
+            element={
+              <OrgRoute>
+                <CreditLines />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/credit-lines/new"
+            element={
+              <OrgRoute>
+                <CreditLineNew />
+              </OrgRoute>
+            }
+          />
 
-                    {/* ================= ORGANIZATION ================= */}
-                    <Route
-                      path="/organization/dashboard"
-                      element={
-                        <ProtectedRoute allowedRoles={["organization"]}>
-                          <OrgDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/payment-methods"
+            element={
+              <OrgRoute>
+                <PaymentMethods />
+              </OrgRoute>
+            }
+          />
 
-                    <Route
-                      path="/organization/campaigns"
-                      element={
-                        <ProtectedRoute allowedRoles={["organization"]}>
-                          <OrgCampaigns />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/minhas-associacoes"
+            element={
+              <ProtectedRoute>
+                <Memberships />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/minhas-doacoes-recorrentes"
+            element={
+              <ProtectedRoute>
+                <RecurringDonations />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/prestacao-contas"
+            element={
+              <OrgRoute>
+                <PrestacaoContas />
+              </OrgRoute>
+            }
+          />
 
-                    <Route
-                      path="/organization/campaigns/:campaignId"
-                      element={
-                        <ProtectedRoute allowedRoles={["organization"]}>
-                          <CampaignDetails />
-                        </ProtectedRoute>
-                      }
-                    />
+          <Route
+            path="/settings"
+            element={
+              <OrgRoute>
+                <Settings />
+              </OrgRoute>
+            }
+          />
 
-                    <Route
-                      path="/organization/contributors"
-                      element={
-                        <ProtectedRoute allowedRoles={["organization"]}>
-                          <OrgContributors />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/organization/settings"
-                      element={
-                        <ProtectedRoute allowedRoles={["organization"]}>
-                          <OrgSettings />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    {/* ================= DONOR ================= */}
-                    <Route
-                      path="/donor/feed"
-                      element={
-                        <ProtectedRoute allowedRoles={["donor"]}>
-                          <DonorFeed />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/donor/campaigns"
-                      element={
-                        <ProtectedRoute allowedRoles={["donor"]}>
-                          <DonorCampaigns />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/donor/organizations"
-                      element={
-                        <ProtectedRoute allowedRoles={["donor"]}>
-                          <DonorOrganizations />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/donor/campaigns/:campaignId"
-                      element={
-                        <ProtectedRoute allowedRoles={["donor"]}>
-                          <DonorCampaignDetails />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/donor/organizations/:organizationId"
-                      element={
-                        <ProtectedRoute allowedRoles={["donor"]}>
-                          <DonorOrganizationDetails />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/donor/wallet"
-                      element={
-                        <ProtectedRoute allowedRoles={["donor"]}>
-                          <DonorWallet />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/donor/settings"
-                      element={
-                        <ProtectedRoute allowedRoles={["donor"]}>
-                          <DonorSettings />
-                        </ProtectedRoute>
-                      }
-                    />
-                  </Routes>
-                </BrowserRouter>
-              </OrganizationProvider>
-            </AssociationProvider>
-          </CampaignProvider>
-        </WalletProvider>
-      </AuthProvider>
-    </SettingsProvider>
+          <Route
+            path="/public/donate/campaign/:campaignId"
+            element={<PublicDonate />}
+          />
+          <Route
+            path="/public/donate/organization/:organizationId"
+            element={<PublicDonate />}
+          />
+          <Route
+            path="/public/accountability/:campaignId"
+            element={<PublicAccountability />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

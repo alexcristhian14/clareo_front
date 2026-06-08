@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import logo from "../assets/logo.svg";
 
 import {
@@ -11,6 +12,8 @@ import { LoginForm } from "../components/login/LoginForm";
 import { LoginFeatureItem } from "../components/login/LoginFeatureItem";
 
 export function Login() {
+  const location = useLocation();
+  const defaultRegister = location.pathname === "/register";
   return (
     <div className="relative min-h-screen bg-slate-100 flex overflow-hidden">
 
@@ -90,7 +93,7 @@ export function Login() {
 
       {/* LADO DIREITO */}
       <div className="flex-1 flex items-center justify-center p-8 relative z-10">
-        <LoginForm />
+        <LoginForm defaultRegister={defaultRegister} />
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-export function ProtectedRoute({ children }) {
-  const { user, loading } = useAuth();
+export function OrgRoute({ children }) {
+  const { user, loading, hasOrganization } = useAuth();
 
   if (loading) {
     return (
@@ -13,6 +13,10 @@ export function ProtectedRoute({ children }) {
   }
 
   if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (!hasOrganization) {
     return <Navigate to="/" replace />;
   }
 
