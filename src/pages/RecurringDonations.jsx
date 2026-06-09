@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { api } from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { api, getStoredUser } from "../services/api";
 import { IndividualLayout } from "../layouts/IndividualLayout";
 import { Button } from "../components/common/Button";
 import { formatCents, formatDate, statusLabel } from "../utils/format";
@@ -20,9 +21,12 @@ export function RecurringDonations() {
   });
   const [saving, setSaving] = useState(false);
 
+  const user = getStoredUser();
+
   async function loadData() {
     try {
-      const { data: rec } = await api.get("/me/recurring_donations");
+      const userId = user?.user_id || user?.id;
+      const { data: rec } = await api.get(`/recurring_donations?user_id=${userId}`);
       setDonations(Array.isArray(rec) ? rec : []);
     } catch {
       toast.error("Erro ao carregar doações recorrentes");
@@ -47,7 +51,7 @@ export function RecurringDonations() {
   async function handleCancel(id, orgId) {
     if (!window.confirm("Cancelar esta doação recorrente?")) return;
     try {
-      await api.delete(`/me/recurring_donations/${id}`, {
+      await api.delete(`/recurring_donations/${id}`, {
         params: { organization_id: orgId },
       });
       toast.success("Doação cancelada");
@@ -61,7 +65,7 @@ export function RecurringDonations() {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post("/me/recurring_donations", {
+      await api.post("/recurring_donations", {
         recurring_donation: {
           organization_id: newRecurring.organization_id,
           amount_cents: Math.round(parseFloat(newRecurring.amount_cents.replace(",", ".")) * 100),

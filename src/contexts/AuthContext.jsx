@@ -38,11 +38,10 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        const { data: orgs } = await api.get("/organizations?limit=50");
+        const userId = userData.user_id || userData.id;
+        const { data: orgs } = await api.get(`/organizations?owner_user_id=${userId}&limit=50`);
         const list = Array.isArray(orgs) ? orgs : orgs.organizations || [];
-        const userOrg = list.find(
-          (o) => o.owner_user_id === (userData.user_id || userData.id)
-        );
+        const userOrg = list[0];
         if (userOrg) {
           setOrganization(userOrg);
         }

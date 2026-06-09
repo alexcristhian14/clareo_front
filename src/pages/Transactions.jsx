@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { AppLayout } from "../layouts/AppLayout";
+import { Pagination } from "../components/common/Pagination";
 import { formatCents, formatDate, statusColor, statusLabel } from "../utils/format";
 import { ArrowLeft, Eye } from "lucide-react";
 import { toast } from "sonner";
+
+const ITEMS_PER_PAGE = 15;
 
 export function Transactions() {
   const navigate = useNavigate();
@@ -12,6 +15,7 @@ export function Transactions() {
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [page, setPage] = useState(1);
 
   async function loadTransactions() {
     try {
@@ -38,6 +42,10 @@ export function Transactions() {
     if (filterStatus !== "all" && t.status !== filterStatus) return false;
     return true;
   });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const paginated = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  useEffect(() => { setPage(1); }, [filterType, filterStatus]);
 
   return (
     <AppLayout title="Transações">
@@ -97,7 +105,7 @@ export function Transactions() {
             <span></span>
           </div>
           <div className="divide-y divide-zinc-100">
-            {filtered.map((t) => (
+            {paginated.map((t) => (
               <div
                 key={t.transaction_id}
                 className="grid grid-cols-5 gap-4 px-6 py-3 items-center hover:bg-gray-50 cursor-pointer text-sm"
@@ -136,6 +144,16 @@ export function Transactions() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+      {filtered.length > ITEMS_PER_PAGE && (
+        <div className="mt-6">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            totalItems={filtered.length}
+          />
         </div>
       )}
     </AppLayout>

@@ -31,6 +31,10 @@ export function relativeTime(isoDate) {
 
 export function formatDate(isoDate, fmt = "dd/MM/yyyy") {
   if (!isoDate) return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) {
+    const [y, m, d] = isoDate.split("-").map(Number);
+    return dateFnsFormat(new Date(y, m - 1, d), fmt, { locale: ptBR });
+  }
   return dateFnsFormat(new Date(isoDate), fmt, { locale: ptBR });
 }
 

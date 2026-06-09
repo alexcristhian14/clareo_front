@@ -4,27 +4,33 @@ import { api, storeOrganization } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import { IndividualLayout } from "../layouts/IndividualLayout";
 import { Button } from "../components/common/Button";
+import { Pagination } from "../components/common/Pagination";
 import { Building2, Plus, ChevronRight, LayoutDashboard } from "lucide-react";
 import { toast } from "sonner";
+
+const ITEMS_PER_PAGE = 10;
 
 export function MinhasInstituicoes() {
   const navigate = useNavigate();
   const { user, setCurrentOrganization } = useAuth();
   const [orgs, setOrgs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     if (!user) return;
-    api.get("/organizations?limit=50").then(({ data }) => {
+    const userId = user.user_id || user.id;
+    api.get(`/organizations?owner_user_id=${userId}&limit=50`).then(({ data }) => {
       const list = Array.isArray(data) ? data : data.organizations || [];
-      const myOrgs = list.filter(
-        (o) => o.owner_user_id === (user.user_id || user.id)
-      );
-      setOrgs(myOrgs);
+      setOrgs(list);
     }).catch(() => {
       toast.error("Erro ao carregar instituições");
     }).finally(() => setLoading(false));
   }, [user]);
+
+  const totalPages = Math.max(1, Math.ceil(orgs.length / ITEMS_PER_PAGE));
+  const paginatedOrgs = orgs.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  useEffect(() => { setPage(1); }, [orgs.length]);
 
   function handleSelectOrg(org) {
     storeOrganization(org);
@@ -72,7 +78,7 @@ export function MinhasInstituicoes() {
           </div>
         ) : (
           <div className="space-y-3">
-            {orgs.map((org) => (
+            {paginatedOrgs.map((org) => (
               <div
                 key={org.organization_id}
                 className="bg-white rounded-xl p-5 border border-zinc-200 shadow-sm hover:shadow-md transition cursor-pointer flex items-center justify-between"
@@ -101,6 +107,16 @@ export function MinhasInstituicoes() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+        {orgs.length > ITEMS_PER_PAGE && (
+          <div className="mt-6">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+              totalItems={orgs.length}
+            />
           </div>
         )}
       </div>

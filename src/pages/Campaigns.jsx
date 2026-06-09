@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { AppLayout } from "../layouts/AppLayout";
 import { Button } from "../components/common/Button";
+import { Pagination } from "../components/common/Pagination";
 import { formatCents, formatDate, statusColor, statusLabel } from "../utils/format";
 import { Plus, Search, Eye } from "lucide-react";
 import { toast } from "sonner";
+
+const ITEMS_PER_PAGE = 12;
 
 export function Campaigns() {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   async function loadCampaigns() {
@@ -37,6 +41,10 @@ export function Campaigns() {
     if (search && !c.name.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const paginated = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  useEffect(() => { setPage(1); }, [filter, search]);
 
   const tabs = [
     { key: "all", label: "Todas" },
@@ -89,7 +97,7 @@ export function Campaigns() {
             </div>
           ))}
         </div>
-      ) : filtered.length === 0 ? (
+      ) : paginated.length === 0 ? (
         <div className="bg-white rounded-[10px] p-12 border border-zinc-200 text-center">
           <p className="text-zinc-500 mb-4">Nenhuma campanha encontrada.</p>
           <Button onClick={() => navigate("/campaigns/new")}>
@@ -98,7 +106,7 @@ export function Campaigns() {
         </div>
       ) : (
         <div className="space-y-4">
-          {filtered.map((c) => {
+          {paginated.map((c) => {
             const pct = c.goal_cents ? ((c.raised_cents || 0) / c.goal_cents) * 100 : 0;
             return (
               <div
@@ -164,6 +172,16 @@ export function Campaigns() {
               </div>
             );
           })}
+        </div>
+      )}
+      {filtered.length > ITEMS_PER_PAGE && (
+        <div className="mt-6">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            totalItems={filtered.length}
+          />
         </div>
       )}
     </AppLayout>

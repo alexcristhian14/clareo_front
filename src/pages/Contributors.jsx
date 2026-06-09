@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { AppLayout } from "../layouts/AppLayout";
 import { Button } from "../components/common/Button";
+import { Pagination } from "../components/common/Pagination";
 import { statusColor, statusLabel } from "../utils/format";
 import { Search, Eye, UserPlus } from "lucide-react";
 import { toast } from "sonner";
+
+const ITEMS_PER_PAGE = 15;
 
 export function Contributors() {
   const navigate = useNavigate();
   const [contributors, setContributors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     loadContributors();
@@ -37,6 +41,10 @@ export function Contributors() {
       c.name?.toLowerCase().includes(search.toLowerCase()) ||
       c.email?.toLowerCase().includes(search.toLowerCase())
   );
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const paginated = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  useEffect(() => { setPage(1); }, [search]);
 
   return (
     <AppLayout title="Contribuintes">
@@ -78,7 +86,7 @@ export function Contributors() {
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map((c) => (
+          {paginated.map((c) => (
             <div
               key={c.id || c.contributor_id}
               className="bg-white rounded-[10px] p-5 border border-zinc-200 hover:shadow-md transition-shadow cursor-pointer"
@@ -105,6 +113,16 @@ export function Contributors() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+      {filtered.length > ITEMS_PER_PAGE && (
+        <div className="mt-6">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            totalItems={filtered.length}
+          />
         </div>
       )}
     </AppLayout>

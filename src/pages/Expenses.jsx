@@ -3,9 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { AppLayout } from "../layouts/AppLayout";
 import { Button } from "../components/common/Button";
+import { Pagination } from "../components/common/Pagination";
 import { formatCents, formatDate, statusColor, statusLabel, sanitizeDescription } from "../utils/format";
 import { ArrowLeft, Plus, Eye, Trash2, Paperclip } from "lucide-react";
 import { toast } from "sonner";
+
+const ITEMS_PER_PAGE = 15;
 
 export function Expenses() {
   const { campaignId } = useParams();
@@ -13,6 +16,7 @@ export function Expenses() {
   const [expenses, setExpenses] = useState([]);
   const [campaignName, setCampaignName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
 
   async function loadData() {
     try {
@@ -53,6 +57,9 @@ export function Expenses() {
   }
 
   const totalAmount = expenses.reduce((s, e) => s + (e.amount_cents || 0), 0);
+
+  const totalPages = Math.max(1, Math.ceil(expenses.length / ITEMS_PER_PAGE));
+  const paginated = expenses.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
     <AppLayout title="Despesas da Campanha">
@@ -110,7 +117,7 @@ export function Expenses() {
         </div>
       ) : (
         <div className="space-y-3">
-          {expenses.map((e) => (
+          {paginated.map((e) => (
             <div
               key={e.entry_id}
               className="bg-white rounded-[10px] p-5 border border-zinc-200"
@@ -157,6 +164,16 @@ export function Expenses() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+      {expenses.length > ITEMS_PER_PAGE && (
+        <div className="mt-6">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            totalItems={expenses.length}
+          />
         </div>
       )}
     </AppLayout>
