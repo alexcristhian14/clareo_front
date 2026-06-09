@@ -142,6 +142,21 @@ export function Campaigns() {
                   <span className="font-medium text-blue-600">{pct.toFixed(0)}%</span>
                 </div>
 
+                <div className="flex gap-4 mt-2 text-xs text-zinc-400">
+                  <span>{c.expense_count || 0} despesas</span>
+                  {(c.spent_cents || 0) > 0 && <span>{formatCents(c.spent_cents)} gasto</span>}
+                </div>
+
+                {c.tags?.length > 0 && (
+                  <div className="flex gap-1 mt-2 flex-wrap">
+                    {c.tags.map((tag) => (
+                      <span key={tag} className="text-xs px-2 py-0.5 bg-zinc-100 text-zinc-500 rounded-full">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
                 <div className="mt-2 text-xs text-zinc-400">
                   {c.starts_at && formatDate(c.starts_at)} até{" "}
                   {c.ends_at && formatDate(c.ends_at)}

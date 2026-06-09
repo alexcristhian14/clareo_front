@@ -38,6 +38,15 @@ export function formatDateTime(isoDate) {
   return formatDate(isoDate, "dd/MM/yyyy 'às' HH:mm");
 }
 
+export function sanitizeDescription(text) {
+  if (!text) return text;
+  return text.replace(/(\d+)\s*centavos/g, (_, num) => {
+    const cents = parseInt(num, 10);
+    if (isNaN(cents)) return _;
+    return formatCents(cents);
+  });
+}
+
 export function statusLabel(status) {
   const map = {
     active: "Ativa",

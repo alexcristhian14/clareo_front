@@ -18,14 +18,12 @@ import { CampaignDetail } from "./pages/CampaignDetail";
 import { Expenses } from "./pages/Expenses";
 import { ExpenseNew } from "./pages/ExpenseNew";
 import { ExpenseDetail } from "./pages/ExpenseDetail";
+import { OrgExpenseNew } from "./pages/OrgExpenseNew";
+import { OrgExpenseDetail } from "./pages/OrgExpenseDetail";
 import { Contributors } from "./pages/Contributors";
 import { ContributorDetail } from "./pages/ContributorDetail";
 import { Wallet } from "./pages/Wallet";
-import { Transactions } from "./pages/Transactions";
-import { TransactionDetail } from "./pages/TransactionDetail";
-import { CreditLines } from "./pages/CreditLines";
-import { CreditLineNew } from "./pages/CreditLineNew";
-import { PaymentMethods } from "./pages/PaymentMethods";
+import { Financas } from "./pages/Financas";
 import { Memberships } from "./pages/Memberships";
 import { RecurringDonations } from "./pages/RecurringDonations";
 import { Settings } from "./pages/Settings";
@@ -33,6 +31,7 @@ import { PrestacaoContas } from "./pages/PrestacaoContas";
 
 import { PublicDonate } from "./pages/PublicDonate";
 import { PublicAccountability } from "./pages/PublicAccountability";
+import { PublicInstitution } from "./pages/PublicInstitution";
 
 export default function App() {
   return (
@@ -143,6 +142,31 @@ export default function App() {
           />
 
           <Route
+            path="/expenses"
+            element={
+              <OrgRoute>
+                <PrestacaoContas />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/expenses/new"
+            element={
+              <OrgRoute>
+                <OrgExpenseNew />
+              </OrgRoute>
+            }
+          />
+          <Route
+            path="/expenses/:expenseId"
+            element={
+              <OrgRoute>
+                <OrgExpenseDetail />
+              </OrgRoute>
+            }
+          />
+
+          <Route
             path="/contributors"
             element={
               <OrgRoute>
@@ -176,44 +200,10 @@ export default function App() {
             }
           />
           <Route
-            path="/transactions"
+            path="/financeiro"
             element={
               <OrgRoute>
-                <Transactions />
-              </OrgRoute>
-            }
-          />
-          <Route
-            path="/transactions/:transactionId"
-            element={
-              <OrgRoute>
-                <TransactionDetail />
-              </OrgRoute>
-            }
-          />
-
-          <Route
-            path="/credit-lines"
-            element={
-              <OrgRoute>
-                <CreditLines />
-              </OrgRoute>
-            }
-          />
-          <Route
-            path="/credit-lines/new"
-            element={
-              <OrgRoute>
-                <CreditLineNew />
-              </OrgRoute>
-            }
-          />
-
-          <Route
-            path="/payment-methods"
-            element={
-              <OrgRoute>
-                <PaymentMethods />
+                <Financas />
               </OrgRoute>
             }
           />
@@ -257,12 +247,20 @@ export default function App() {
             element={<PublicDonate />}
           />
           <Route
+            path="/public/donate/:campaignId"
+            element={<PublicDonate />}
+          />
+          <Route
             path="/public/donate/organization/:organizationId"
             element={<PublicDonate />}
           />
           <Route
             path="/public/accountability/:campaignId"
             element={<PublicAccountability />}
+          />
+          <Route
+            path="/public/institutions/:id"
+            element={<PublicInstitution />}
           />
         </Routes>
       </BrowserRouter>

@@ -6,8 +6,8 @@ import { formatCents, formatDate, formatDateTime, statusLabel, sanitizeDescripti
 import { ArrowLeft, Download, Trash2, Paperclip } from "lucide-react";
 import { toast } from "sonner";
 
-export function ExpenseDetail() {
-  const { campaignId, expenseId } = useParams();
+export function OrgExpenseDetail() {
+  const { expenseId } = useParams();
   const navigate = useNavigate();
   const [expense, setExpense] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,13 +16,11 @@ export function ExpenseDetail() {
     try {
       const org = JSON.parse(localStorage.getItem("clareo_organization") || "{}");
       const orgId = org?.organization_id || org?.id;
-      const { data } = await api.get(
-        `/organizations/${orgId}/campaigns/${campaignId}/expenses/${expenseId}`
-      );
+      const { data } = await api.get(`/organizations/${orgId}/expenses/${expenseId}`);
       setExpense(data);
     } catch {
       toast.error("Erro ao carregar despesa");
-      navigate(`/campaigns/${campaignId}/expenses`);
+      navigate("/expenses");
     } finally {
       setLoading(false);
     }
@@ -30,14 +28,14 @@ export function ExpenseDetail() {
 
   useEffect(() => {
     loadExpense();
-  }, [campaignId, expenseId]);
+  }, [expenseId]);
 
   async function handleDownload(attId) {
     try {
       const org = JSON.parse(localStorage.getItem("clareo_organization") || "{}");
       const orgId = org?.organization_id || org?.id;
       const response = await api.get(
-        `/organizations/${orgId}/campaigns/${campaignId}/expenses/${expenseId}/attachments/${attId}/download`,
+        `/organizations/${orgId}/campaigns/00000000-0000-0000-0000-000000000000/expenses/${expenseId}/attachments/${attId}/download`,
         { responseType: "blob" }
       );
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -59,7 +57,7 @@ export function ExpenseDetail() {
       const org = JSON.parse(localStorage.getItem("clareo_organization") || "{}");
       const orgId = org?.organization_id || org?.id;
       await api.delete(
-        `/organizations/${orgId}/campaigns/${campaignId}/expenses/${expenseId}/attachments/${attId}`
+        `/organizations/${orgId}/campaigns/00000000-0000-0000-0000-000000000000/expenses/${expenseId}/attachments/${attId}`
       );
       loadExpense();
       toast.success("Anexo removido");
@@ -81,10 +79,10 @@ export function ExpenseDetail() {
   return (
     <AppLayout title="Detalhe da Despesa">
       <button
-        onClick={() => navigate(`/campaigns/${campaignId}/expenses`)}
+        onClick={() => navigate("/expenses")}
         className="flex items-center gap-2 text-sm text-zinc-500 hover:text-slate-700 mb-6"
       >
-        <ArrowLeft size={16} /> Despesas
+        <ArrowLeft size={16} /> Despesas Gerais
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -97,9 +95,7 @@ export function ExpenseDetail() {
             </div>
             <div className="flex justify-between">
               <dt className="text-zinc-500">Valor</dt>
-              <dd className="font-bold text-red-600">
-                {formatCents(expense.amount_cents)}
-              </dd>
+              <dd className="font-bold text-red-600">{formatCents(expense.amount_cents)}</dd>
             </div>
             {expense.category && (
               <div className="flex justify-between">
@@ -110,22 +106,20 @@ export function ExpenseDetail() {
             <div className="flex justify-between">
               <dt className="text-zinc-500">Data</dt>
               <dd className="font-medium text-slate-800">
-                {expense.expense_date
-                  ? formatDate(expense.expense_date)
-                  : "---"}
+                {expense.expense_date ? formatDate(expense.expense_date) : "---"}
               </dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-zinc-500">Tipo</dt>
+              <dd className="font-medium text-blue-600">Despesa Geral</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-zinc-500">Status</dt>
-              <dd className="font-medium text-emerald-600">
-                {statusLabel(expense.status)}
-              </dd>
+              <dd className="font-medium text-emerald-600">{statusLabel(expense.status)}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-zinc-500">Criado em</dt>
-              <dd className="font-medium text-slate-800">
-                {formatDateTime(expense.created_at)}
-              </dd>
+              <dd className="font-medium text-slate-800">{formatDateTime(expense.created_at)}</dd>
             </div>
           </dl>
         </div>
@@ -142,24 +136,16 @@ export function ExpenseDetail() {
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
               >
                 <div>
-                      <p className="text-sm font-medium text-slate-700 flex items-center gap-1">
-                        <Paperclip size={14} className="text-zinc-400" /> {att.original_filename}
+                  <p className="text-sm font-medium text-slate-700 flex items-center gap-1">
+                    <Paperclip size={14} className="text-zinc-400" /> {att.original_filename}
                   </p>
-                  <p className="text-xs text-zinc-400">
-                    {(att.file_size / 1024).toFixed(0)} KB
-                  </p>
+                  <p className="text-xs text-zinc-400">{(att.file_size / 1024).toFixed(0)} KB</p>
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => handleDownload(att.attachment_id)}
-                    className="p-2 hover:bg-blue-50 rounded-lg"
-                  >
+                  <button onClick={() => handleDownload(att.attachment_id)} className="p-2 hover:bg-blue-50 rounded-lg">
                     <Download size={16} className="text-blue-600" />
                   </button>
-                  <button
-                    onClick={() => handleDeleteAttachment(att.attachment_id)}
-                    className="p-2 hover:bg-red-50 rounded-lg"
-                  >
+                  <button onClick={() => handleDeleteAttachment(att.attachment_id)} className="p-2 hover:bg-red-50 rounded-lg">
                     <Trash2 size={16} className="text-red-400" />
                   </button>
                 </div>

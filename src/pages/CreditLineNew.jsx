@@ -4,7 +4,7 @@ import { api } from "../services/api";
 import { AppLayout } from "../layouts/AppLayout";
 import { Button } from "../components/common/Button";
 import { displayToCents } from "../utils/format";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 
 export function CreditLineNew() {
@@ -73,7 +73,7 @@ export function CreditLineNew() {
             />
           </div>
           <p className="text-xs text-amber-600">
-            ⚠️ A taxa pode variar conforme análise de crédito. Valores finais
+            <AlertTriangle size={14} /> A taxa pode variar conforme análise de crédito. Valores finais
             serão confirmados.
           </p>
         </div>

@@ -4,8 +4,10 @@ const TOKEN_KEY = "clareo_token";
 const USER_KEY = "clareo_user";
 const ORG_KEY = "clareo_organization";
 
+export const API_BASE = "http://localhost:3000";
+
 export const api = axios.create({
-  baseURL: "http://localhost:3000/api/v1",
+  baseURL: `${API_BASE}/api/v1`,
 });
 
 api.interceptors.request.use((config) => {

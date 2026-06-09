@@ -5,7 +5,7 @@ import { api, storeOrganization } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 import { IndividualLayout } from "../layouts/IndividualLayout";
 import { Button } from "../components/common/Button";
-import { Copy, Check, ArrowRight, Shield, Heart, Zap, TrendingUp } from "lucide-react";
+import { Copy, Check, ArrowRight, Shield, Heart, Zap, TrendingUp, CircleCheck, AlertTriangle } from "lucide-react";
 
 export function NewOrganization() {
   const [step, setStep] = useState("info");
@@ -56,7 +56,9 @@ export function NewOrganization() {
       <IndividualLayout>
         <div className="max-w-lg mx-auto px-4 py-16">
           <div className="bg-white rounded-[20px] p-8 shadow-lg border border-zinc-200 text-center">
-            <div className="text-5xl mb-4">🎉</div>
+            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CircleCheck size={32} className="text-emerald-600" />
+            </div>
             <h2 className="text-2xl font-bold text-slate-800 mb-2">
               Instituição criada!
             </h2>
@@ -68,7 +70,7 @@ export function NewOrganization() {
             {apiKey && (
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-left">
                 <p className="text-amber-800 font-medium text-sm flex items-center gap-2 mb-2">
-                  ⚠️ Guarde esta chave em local seguro.
+                  <AlertTriangle size={16} /> Guarde esta chave em local seguro.
                 </p>
                 <p className="text-amber-600 text-xs mb-3">
                   Ela não será mostrada novamente.

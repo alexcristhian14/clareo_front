@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { AppLayout } from "../layouts/AppLayout";
 import { Button } from "../components/common/Button";
@@ -8,19 +8,11 @@ import { ArrowLeft, Paperclip } from "lucide-react";
 import { toast } from "sonner";
 
 const CATEGORIES = [
-  "Alimentação",
-  "Estrutura",
-  "Divulgação",
-  "Transporte",
-  "Pessoal",
-  "Material",
-  "Serviço",
-  "Impostos",
-  "Outros",
+  "Alimentação", "Estrutura", "Divulgação", "Transporte",
+  "Pessoal", "Material", "Serviço", "Impostos", "Outros",
 ];
 
-export function ExpenseNew() {
-  const { campaignId } = useParams();
+export function OrgExpenseNew() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     description: "",
@@ -45,7 +37,7 @@ export function ExpenseNew() {
       const amountCents = displayToCents(form.amount_cents);
 
       const { data: expense } = await api.post(
-        `/organizations/${orgId}/campaigns/${campaignId}/expenses`,
+        `/organizations/${orgId}/expenses`,
         {
           expense: {
             description: form.description,
@@ -63,14 +55,14 @@ export function ExpenseNew() {
         const fd = new FormData();
         fd.append("file", file);
         await api.post(
-          `/organizations/${orgId}/campaigns/${campaignId}/expenses/${expenseId}/attachments`,
+          `/organizations/${orgId}/campaigns/00000000-0000-0000-0000-000000000000/expenses/${expenseId}/attachments`,
           fd,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
       }
 
-      toast.success("Despesa criada!");
-      navigate(`/campaigns/${campaignId}/expenses`);
+      toast.success("Despesa geral criada!");
+      navigate("/expenses");
     } catch (err) {
       toast.error(err.response?.data?.error || "Erro ao criar despesa");
     } finally {
@@ -79,28 +71,30 @@ export function ExpenseNew() {
   }
 
   return (
-    <AppLayout title="Nova Despesa">
+    <AppLayout title="Nova Despesa Geral">
       <button
-        onClick={() => navigate(`/campaigns/${campaignId}/expenses`)}
+        onClick={() => navigate("/expenses")}
         className="flex items-center gap-2 text-sm text-zinc-500 hover:text-slate-700 mb-6"
       >
-        <ArrowLeft size={16} /> Voltar
+        <ArrowLeft size={16} /> Despesas Gerais
       </button>
 
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-[10px] p-6 border border-zinc-200 max-w-2xl"
       >
+        <p className="text-xs text-zinc-400 mb-6">
+          Esta despesa será registrada para a instituição como um todo, sem vínculo com campanha específica.
+        </p>
+
         <div className="space-y-5">
           <div>
-            <label className="text-[#334155] text-xs font-bold">
-              Descrição *
-            </label>
+            <label className="text-[#334155] text-xs font-bold">Descrição *</label>
             <input
               name="description"
               value={form.description}
               onChange={handleChange}
-              placeholder="Ex: Buffet para festa junina"
+              placeholder="Ex: Aluguel da sede"
               required
               minLength={3}
               className="w-full mt-2 h-11 px-3 rounded-[10px] bg-slate-50 border border-[#334155] outline-none"
@@ -108,9 +102,7 @@ export function ExpenseNew() {
           </div>
 
           <div>
-            <label className="text-[#334155] text-xs font-bold">
-              Valor (R$) *
-            </label>
+            <label className="text-[#334155] text-xs font-bold">Valor (R$) *</label>
             <input
               name="amount_cents"
               value={form.amount_cents}
@@ -131,17 +123,13 @@ export function ExpenseNew() {
             >
               <option value="">Selecione...</option>
               {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+                <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="text-[#334155] text-xs font-bold">
-              Data da Despesa
-            </label>
+            <label className="text-[#334155] text-xs font-bold">Data da Despesa</label>
             <input
               type="date"
               name="expense_date"
@@ -166,9 +154,7 @@ export function ExpenseNew() {
           </div>
 
           <div>
-            <label className="text-[#334155] text-xs font-bold">
-              Anexos (opcional)
-            </label>
+            <label className="text-[#334155] text-xs font-bold">Anexos (opcional)</label>
             <div className="mt-2 border-2 border-dashed border-zinc-300 rounded-[10px] p-6 text-center">
               <input
                 type="file"
@@ -186,7 +172,7 @@ export function ExpenseNew() {
               {files.length > 0 && (
                 <div className="mt-3 text-left space-y-1">
                   {Array.from(files).map((f, i) => (
-                    <p key={i} className="text-xs text-zinc-500">
+                    <p key={i} className="text-xs text-zinc-500 flex items-center gap-1">
                       <Paperclip size={14} className="text-zinc-400 inline" /> {f.name} ({(f.size / 1024).toFixed(0)} KB)
                     </p>
                   ))}
@@ -197,11 +183,7 @@ export function ExpenseNew() {
         </div>
 
         <div className="flex gap-3 mt-8">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate(`/campaigns/${campaignId}/expenses`)}
-          >
+          <Button type="button" variant="outline" onClick={() => navigate("/expenses")}>
             Cancelar
           </Button>
           <Button type="submit" disabled={loading}>

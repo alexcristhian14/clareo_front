@@ -5,14 +5,12 @@ import {
   Megaphone,
   Users,
   Wallet,
-  CreditCard,
   Settings,
   LogOut,
-  PiggyBank,
-  ArrowLeftRight,
+  Landmark,
   Menu,
   X,
-  FileText,
+  ScrollText,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import logo from "../assets/logo.svg";
@@ -22,10 +20,8 @@ const navItems = [
   { to: "/campaigns", label: "Campanhas", icon: Megaphone },
   { to: "/contributors", label: "Contribuintes", icon: Users },
   { to: "/wallet", label: "Carteira", icon: Wallet },
-  { to: "/transactions", label: "Transações", icon: ArrowLeftRight },
-  { to: "/credit-lines", label: "Linhas de Crédito", icon: CreditCard },
-  { to: "/payment-methods", label: "Pagamentos", icon: PiggyBank },
-  { to: "/prestacao-contas", label: "Prestação de Contas", icon: FileText },
+  { to: "/financeiro", label: "Financeiro", icon: Landmark },
+  { to: "/prestacao-contas", label: "Prestação de Contas", icon: ScrollText },
   { to: "/settings", label: "Configurações", icon: Settings },
 ];
 

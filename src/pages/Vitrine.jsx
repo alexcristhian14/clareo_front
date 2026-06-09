@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { IndividualLayout } from "../layouts/IndividualLayout";
 import { useAuth } from "../contexts/AuthContext";
+import { formatCents } from "../utils/format";
 import {
   Building2, Heart, Shield, Zap,
-  ExternalLink, LayoutDashboard
+  ExternalLink, LayoutDashboard, Search, TrendingUp, Tag
 } from "lucide-react";
 import { api } from "../services/api";
 
@@ -12,12 +13,26 @@ export function Vitrine() {
   const navigate = useNavigate();
   const { user, hasOrganization } = useAuth();
   const [institutions, setInstitutions] = useState([]);
+  const [campaigns, setCampaigns] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [allTags, setAllTags] = useState([]);
 
   useEffect(() => {
     api.get("/public/organizations").then(({ data }) => {
       setInstitutions(Array.isArray(data) ? data : []);
     }).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const params = selectedTag ? `?tag=${encodeURIComponent(selectedTag)}&limit=50` : "?limit=50";
+    api.get(`/public/campaigns${params}`).then(({ data }) => {
+      const list = Array.isArray(data) ? data : (data?.campaigns || []);
+      setCampaigns(list.filter((c) => c.status === "active"));
+      if (data?.tags) setAllTags(data.tags);
+    }).catch(() => {});
+  }, [selectedTag]);
+
+  const filteredCampaigns = campaigns;
 
   return (
     <IndividualLayout>
@@ -27,7 +42,7 @@ export function Vitrine() {
             Doe para causas que <span className="text-blue-600">transformam</span>
           </h1>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-            Conectamos doadores a instituições transparentes.
+            Conectamos doadores a instituções transparentes.
             Acompanhe como cada real é usado com prestação de contas em tempo real.
           </p>
           <div className="flex items-center justify-center gap-4 pt-4">
@@ -60,6 +75,97 @@ export function Vitrine() {
             )}
           </div>
         </section>
+
+        {campaigns.length > 0 && (
+          <section>
+            <div className="flex items-center gap-2 mb-6">
+              <TrendingUp size={24} className="text-blue-600" />
+              <h2 className="text-2xl font-bold text-slate-800">
+                Campanhas em Destaque
+              </h2>
+            </div>
+
+            {allTags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                <button
+                  onClick={() => setSelectedTag(null)}
+                  className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${
+                    !selectedTag
+                      ? "bg-blue-600 text-white"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+                  }`}
+                >
+                  Todas
+                </button>
+                {allTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setSelectedTag(tag)}
+                    className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors flex items-center gap-1 ${
+                      selectedTag === tag
+                        ? "bg-blue-600 text-white"
+                        : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+                    }`}
+                  >
+                    <Tag size={12} />
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCampaigns.map((c) => {
+                const pct = c.goal_cents ? ((c.raised_cents || 0) / c.goal_cents) * 100 : 0;
+                const coverGrad = c.cover_color || "from-blue-600 to-indigo-700";
+                return (
+                  <div
+                    key={c.campaign_id}
+                    className="bg-white rounded-2xl border border-zinc-200 shadow-sm hover:shadow-lg transition overflow-hidden flex flex-col"
+                  >
+                    <div
+                      className="h-32 bg-gradient-to-br"
+                      style={c.cover_color ? { background: c.cover_color } : {}}
+                    />
+                    <div className="p-5 flex-1 flex flex-col">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center text-white text-xs font-bold">
+                          {(c.name || "C")[0].toUpperCase()}
+                        </div>
+                        <h3 className="font-bold text-slate-800">{c.name}</h3>
+                      </div>
+
+                      <div className="h-2 bg-stone-200 rounded-full overflow-hidden mb-2">
+                        <div
+                          className="h-full bg-blue-600 rounded-full"
+                          style={{ width: `${Math.min(pct, 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex justify-between text-xs text-zinc-500 mb-3">
+                        <span>{formatCents(c.raised_cents || 0)} de {formatCents(c.goal_cents)}</span>
+                        <span className="font-medium text-blue-600">{pct.toFixed(0)}%</span>
+                      </div>
+
+                      {c.status && (
+                        <span className="text-xs text-zinc-400 mb-3 capitalize">
+                          {c.status === "active" ? "Ativa" : c.status}
+                        </span>
+                      )}
+
+                      <button
+                        onClick={() => navigate(`/public/donate/campaign/${c.campaign_id}`)}
+                        className="mt-auto w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition"
+                      >
+                        <Heart size={16} />
+                        Doar Agora
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {user && (
           <section className="text-center">
