@@ -4,7 +4,7 @@ const TOKEN_KEY = "clareo_token";
 const USER_KEY = "clareo_user";
 const ORG_KEY = "clareo_organization";
 
-export const API_BASE = "http://localhost:3000";
+export const API_BASE = "http://api.174-138-124-240.nip.io";
 
 export const api = axios.create({
   baseURL: `${API_BASE}/api/v1`,

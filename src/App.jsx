@@ -30,6 +30,7 @@ import { Settings } from "./pages/Settings";
 import { PrestacaoContas } from "./pages/PrestacaoContas";
 
 import { PublicDonate } from "./pages/PublicDonate";
+import { PublicOrgTransparency } from "./pages/PublicOrgTransparency";
 import { PublicAccountability } from "./pages/PublicAccountability";
 import { PublicInstitution } from "./pages/PublicInstitution";
 
@@ -252,7 +253,7 @@ export default function App() {
           />
           <Route
             path="/public/donate/organization/:organizationId"
-            element={<PublicDonate />}
+            element={<PublicOrgTransparency />}
           />
           <Route
             path="/public/accountability/:campaignId"

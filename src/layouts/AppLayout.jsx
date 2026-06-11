@@ -19,7 +19,7 @@ const navItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/campaigns", label: "Campanhas", icon: Megaphone },
   { to: "/contributors", label: "Contribuintes", icon: Users },
-  { to: "/wallet", label: "Carteira", icon: Wallet },
+  //{ to: "/wallet", label: "Carteira", icon: Wallet },
   { to: "/financeiro", label: "Financeiro", icon: Landmark },
   { to: "/prestacao-contas", label: "Prestação de Contas", icon: ScrollText },
   { to: "/settings", label: "Configurações", icon: Settings },
